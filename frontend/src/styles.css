@@ -1,0 +1,12 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@600&family=Inria+Sans:wght@300;700&family=Inter:wght@200;300&family=Inria+Serif:wght@400;700&display=swap');
+
+:root{
+    --primary-color: #FFEDED;
+    --secondary-color: #535353;
+    --tertiary-color: #222222;
+    --border-color: #cecece;
+    --font-family: 'Inter', sans-serif;
+    --font-family-heading: 'Inknut Antiqua', serif;
+    --font-family-secondary: 'Inria Sans', sans-serif;
+}
