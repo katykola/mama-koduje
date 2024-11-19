@@ -1,6 +1,6 @@
 import { Box, Typography, Link, Stack } from '@mui/material';
 
-export default function LifeTile({imgSrc}) {
+export default function LifeTile({imgSrc, order, date, title, subtitle, text}) {
     return(
 
         <Stack direction='column' sx={{ }}>
@@ -20,12 +20,13 @@ export default function LifeTile({imgSrc}) {
                             justifyContent: 'center',
                         }}
                         >
-                        <Typography variant='tileTextSm' sx={{ color: 'white', padding: '0.5rem', fontSize: '1rem' }}>1</Typography>
+                        <Typography variant='tileTextSm' sx={{ color: 'white', padding: '0.5rem', fontSize: '1rem' }}>{order}</Typography>
                     </Box>
-                    <Typography variant='body1' sx={{ marginBottom: '0.5rem' }}>duben 2023</Typography>
+                    <Typography variant='body1' sx={{ marginBottom: '0.5rem' }}>{date}</Typography>
                 </Stack>
-                <Typography variant="tileTitle" sx={{ marginTop: '1rem' }}><Link>The Ultimate HTML5&CSS3 Series</Link></Typography>
-                <Typography variant='tileText'>Malá Ema má čerstvě 3 měsíce. Role matky pro mě bylo jako hození do vody. Kurz mě drží v jakžtakž psychiké pohodě. Pracuju ve chvílích, když na mě malá spí v nosítku. Potím se a bolí mě záda. Ale stojí to za to!</Typography>
+                <Typography variant="tileTitle" sx={{ marginTop: '1rem' }}><Link>{title}</Link></Typography>
+                <Typography variant="author" sx={{ marginTop: '1rem' }}>{subtitle}</Typography>
+                <Typography variant='tileText'>{text}</Typography>
             </Box>
           
             <Box
@@ -48,22 +49,6 @@ export default function LifeTile({imgSrc}) {
                 alt="placeholder"
                 src={imgSrc}
                 />
-                {/* <Box
-                    position="absolute"
-                    sx={{
-                        top: '1.5rem',
-                        left: '1.5rem',
-                        backgroundColor: 'var(--tertiary-color)',
-                        width: '2.5rem', // Set width to make it round
-                        height: '2.5rem', // Set height to make it round
-                        borderRadius: '50%', // Make the box round
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    <Typography variant='tileTextSm' sx={{ color: 'white', padding: '0.5rem', fontSize: '1.2rem' }}>1</Typography>
-                </Box> */}
             </Box>
 
         </Stack>
