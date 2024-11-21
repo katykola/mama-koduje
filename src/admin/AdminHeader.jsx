@@ -29,7 +29,7 @@ export default function AdminHeader() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/'); // Redirect to login page after logout
+      navigate('/auth'); // Redirect to login page after logout
     } catch (err) {
       console.log(err);
     }
@@ -69,6 +69,7 @@ export default function AdminHeader() {
           </>
         ) : (
           <>
+            <Typography sx={{ fontSize: '1.2rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
             {menuItems.map((item, index) => (
                 <Typography key={index} variant="navItem" sx={{ height: '100%', paddingLeft: '1rem', paddingRight: '1rem' }}>
                   <Link to={item.path} style={{ color: 'inherit', textDecoration: 'none' }}>
@@ -76,9 +77,10 @@ export default function AdminHeader() {
                   </Link>
                 </Typography>
             ))}
-            <Button variant='outlined' color="inherit" onClick={handleLogout}>
+            <Button variant='contained' color="inherit" onClick={handleLogout}>
               Odhlásit
-            </Button>          </>
+            </Button>          
+            </>
         )}
       </Toolbar>
     </AppBar>

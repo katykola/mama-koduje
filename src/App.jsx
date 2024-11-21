@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-    <CssBaseline />
+    <CssBaseline/>
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <Router>
