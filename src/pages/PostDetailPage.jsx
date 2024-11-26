@@ -1,12 +1,44 @@
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
 import MainImage from '../components/MainImage';
+import { db } from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function PostDetailPage() {
+
+const { id } = useParams();
+  const [post, setPost] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const docRef = doc(db, 'posts', id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setPost(docSnap.data());
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching document:', error);
+      }
+    };
+
+    fetchPost();
+  }, [id]);
+
+  
+
+  if (!post) {
+    return <Typography>Loading...</Typography>;
+  }
+
     return(
         <>
         <Stack sx={{ border: '1px solid grey' }}>
-            <Typography>24.5.2024 * 3 min čtení</Typography>
-            <Typography variant="h1">Jak se jako matka dobře vyspat. Dojmy z první ruky.</Typography>
+            <Typography>24.5.2024</Typography>
+            <Typography variant="h1">{post.title}</Typography>
             <Typography variant='body1'>Malá Ema má za chvíli jeden rok a tak je třeba trochu bilancovat a položit si otázku, jaký byl můj první rok na mateřské.</Typography>
             <MainImage imgSrc="/littlehand_desktop.jpg"/>
             <Typography>

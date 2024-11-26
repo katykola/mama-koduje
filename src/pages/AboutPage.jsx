@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import { Box, Stack, Typography, Link, Input, Button } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import MainImage from "../components/MainImage"
 import LifeTile from "../components/LifeTile"
 import { db } from "../config/firebase";

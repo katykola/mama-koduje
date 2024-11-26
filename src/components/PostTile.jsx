@@ -1,10 +1,27 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Link, Stack } from '@mui/material';
 
-export default function PostTile( {imgSrc} ) {
+export default function PostTile( { id, date, title, imgSrc, content, onPostSelect} ) {
+
+  const navigate = useNavigate();
+
+  const dateObject = date.toDate();
+
+  const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  const handlePostSelect = () => {
+    console.log(id);
+    navigate(`/post/${id}`);
+  };
+
     return(
         <>
 
-        <Stack direction='row' sx={{ }}>
+        <Stack direction='row' sx={{ maxHeight: '300px'}}>
           
             <Box
             sx={{
@@ -28,10 +45,9 @@ export default function PostTile( {imgSrc} ) {
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
-                <Typography variant='tileTextSm' sx={{ marginBottom: '0.5rem' }}>24.5.2024 * 3 min čtení</Typography>
-                <Typography variant="tileTitle"><Link>Jak se jako matka dobře vyspat</Link></Typography>
-                <Typography variant='tileText'>Kurz od Moshe byl úplně prvním, který jsem absolovovala. Dle mého názoru poskytuje dobrou.</Typography>
-                <Typography variant='tileTextSm' sx={{ mt: 2 }}>0 komentářů</Typography>
+                <Typography variant='tileTextSm' sx={{ marginBottom: '0.5rem' }}>{formattedDate}</Typography>
+                <Typography variant="tileTitle"><Link onClick={handlePostSelect}>{title}</Link></Typography>
+                <Typography variant='tileText' sx={{overflow: 'hidden'}}>{content}</Typography>
             </Box>
 
         </Stack>

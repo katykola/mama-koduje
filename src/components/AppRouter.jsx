@@ -48,7 +48,7 @@ export default function AppRouter(){
                 <Route path="/recenze" element={<ReviewPage />} />
                 <Route path="/ze-zivota" element={<PostPage />} />
                 <Route path="/o-me" element={<AboutPage />} />
-                <Route path="/post" element={<PostDetailPage />} />
+                <Route path="/post/:id" element={<PostDetailPage />} />
                 </Routes>
             </Wrapper>
             <Footer />
