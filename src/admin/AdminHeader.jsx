@@ -25,6 +25,10 @@ export default function AdminHeader() {
     }
     setDrawerOpen(open);
   };
+
+  const handleClick = () => {
+
+  }
   
   const handleLogout = async () => {
     try {
@@ -55,28 +59,14 @@ export default function AdminHeader() {
                 <DarkModeOutlinedIcon/>
                 <CloseOutlinedIcon onClick={toggleDrawer(false)} />
               </Box>
-              <List>
-                {menuItems.map((item, index) => (
-                  <ListItem button key={index} component={Link} to={item.path} onClick={toggleDrawer(false)}>
-                    <ListItemText primary={item.text} />
-                  </ListItem>
-                ))}
             <Button variant='outlined' color="inherit" onClick={handleLogout}>
               Odhlásit
             </Button>              
-            </List>            
             </Drawer>
           </>
         ) : (
           <>
             <Typography sx={{ fontSize: '1.2rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
-            {menuItems.map((item, index) => (
-                <Typography key={index} variant="navItem" sx={{ height: '100%', paddingLeft: '1rem', paddingRight: '1rem' }}>
-                  <Link to={item.path} style={{ color: 'inherit', textDecoration: 'none' }}>
-                    {item.text}
-                  </Link>
-                </Typography>
-            ))}
             <Button variant='contained' color="inherit" onClick={handleLogout}>
               Odhlásit
             </Button>          
