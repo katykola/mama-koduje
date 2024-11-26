@@ -7,7 +7,12 @@ import PostTile from '../components/PostTile';
 import Icons from '../components/Icons';
 
 
-export default function HomePage() {
+export default function HomePage({posts, handlePostSelect}) {
+
+    const postsWithAuthor = posts.filter(post => post.author);
+    const postsWithoutAuthor = posts.filter(post => !post.author);
+
+
     return (
         <>        
       <Stack spacing={6}>
@@ -17,9 +22,9 @@ export default function HomePage() {
         <Stack spacing={4}>
           <Typography variant="sectionTitle">RECENZE KURZŮ, BOOTCAMPŮ A KNIH </Typography>
               <Stack  direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <ReviewTile/>
-                  <ReviewTile/>
-                  <ReviewTile/>
+              {postsWithAuthor.map((post) => (
+                    <ReviewTile id={post.id} tags={post.tags} rating={post.rating} title={post.title} author={post.author} perex={post.perex} onPostSelect={handlePostSelect}/>
+                    ))}
               </Stack>
               <Stack sx={{ justifyContent: "center", alignItems: "flex-end"}}>
                 <Button variant="contained">Zobrazit všechny recenze</Button>
@@ -31,9 +36,9 @@ export default function HomePage() {
             <Grid item xs={12} md={6}>
                 <Stack spacing={2}>
                     <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
-                    <PostTile imgSrc="/littlehand_desktop.jpg"/>
-                    <PostTile imgSrc="/littlehand_desktop.jpg"/>
-                    <PostTile imgSrc="/littlehand_desktop.jpg"/>
+                    {postsWithoutAuthor.map((post) => (
+                    <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect}/>
+                    ))}
                 </Stack>
             </Grid>
 

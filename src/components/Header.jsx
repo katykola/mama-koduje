@@ -11,7 +11,6 @@ const menuItems = [
   { text: 'Ze života', path: '/ze-zivota' },
   { text: 'O mě', path: '/o-me' },
   { text: 'Kontakt', path: '/kontakt' },
-  { text: 'Post', path: '/post' },
   { text: 'Dark Mode' },
 ];
 

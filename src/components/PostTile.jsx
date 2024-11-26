@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Link, Stack } from '@mui/material';
 
-export default function PostTile( { id, date, title, imgSrc, content, onPostSelect} ) {
+export default function PostTile( { id, date, title, imgSrc, perex} ) {
 
   const navigate = useNavigate();
 
@@ -14,14 +14,13 @@ export default function PostTile( { id, date, title, imgSrc, content, onPostSele
   });
 
   const handlePostSelect = () => {
-    console.log(id);
     navigate(`/post/${id}`);
   };
 
     return(
         <>
 
-        <Stack direction='row' sx={{ maxHeight: '300px'}}>
+        <Stack direction='row' sx={{ }}>
           
             <Box
             sx={{
@@ -47,7 +46,7 @@ export default function PostTile( { id, date, title, imgSrc, content, onPostSele
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
                 <Typography variant='tileTextSm' sx={{ marginBottom: '0.5rem' }}>{formattedDate}</Typography>
                 <Typography variant="tileTitle"><Link onClick={handlePostSelect}>{title}</Link></Typography>
-                <Typography variant='tileText' sx={{overflow: 'hidden'}}>{content}</Typography>
+                <Typography variant='tileText' sx={{overflow: 'hidden'}}>{perex}</Typography>
             </Box>
 
         </Stack>
