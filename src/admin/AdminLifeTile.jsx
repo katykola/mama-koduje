@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Link, Stack, Button, useMediaQuery, FormControl, InputLabel, Input } from '@mui/material';
+import { Box, Typography, Link, Stack, Button, useMediaQuery, FormControl, InputLabel, Input, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 export default function AdminLifeTile({ id, order, date, title, subtitle, text, deleteLifeXP, updateLifeXP }) {
@@ -15,8 +15,9 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
   const [editedSubtitle, setEditedSubtitle] = useState(subtitle);
   const [editedText, setEditedText] = useState(text);
 
-  const handleEdit = () => {
-    setIsEditing(true);
+  
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
   };
 
   const handleSave = () => {
@@ -25,7 +26,12 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
   };
 
   return (
-    <Stack direction="column" sx={{ border: '1px solid var(--border-color)' }}>
+
+
+    <>    
+    { !isEditing ?
+      
+      <Stack direction="column" sx={{ border: '1px solid var(--border-color)' }}>
       <Stack
         direction={isSmallScreen ? 'column' : 'row'}
         spacing={2}
@@ -72,8 +78,8 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
           <Typography variant="author" sx={{ marginTop: '1rem' }}>
             {subtitle}
           </Typography>
-
         </Stack>
+
         <Stack
           direction="row"
           spacing={2}
@@ -81,7 +87,7 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
             justifyContent: isSmallScreen ? 'center' : 'end',
           }}
         >
-          <Button variant="outlined" color="primary" onClick={handleEdit}>
+          <Button variant="outlined" color="primary" onClick={toggleEdit}>
             Editovat
           </Button>
           <Button onClick={() => deleteLifeXP(id)} variant="outlined" color="primary">
@@ -89,55 +95,75 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
           </Button>
         </Stack>
       </Stack>
+      </Stack>
 
-      {isEditing && (
+
+      :
+
+      <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
+
         <Stack spacing={2} sx={{ padding: '1rem' }}>
           <FormControl>
-            <InputLabel htmlFor="order">Order</InputLabel>
-            <Input
+            <TextField
+              label="Pořadí"
               id="order"
               value={editedOrder}
               onChange={(e) => setEditedOrder(Number(e.target.value))}
+              sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="date">Date</InputLabel>
-            <Input
+            <TextField
+              label="Datum"
               id="date"
               value={editedDate}
               onChange={(e) => setEditedDate(e.target.value)}
+              sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="title">Title</InputLabel>
-            <Input
+            <TextField
+              label="Název"
               id="title"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
+              sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="subtitle">Subtitle</InputLabel>
-            <Input
+            <TextField
+              label="Podnázev"
               id="subtitle"
               value={editedSubtitle}
               onChange={(e) => setEditedSubtitle(e.target.value)}
+              sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+
             />
           </FormControl>
           <FormControl>
-            <InputLabel htmlFor="text">Text</InputLabel>
-            <Input
+            <TextField
+              label="Text"
               id="text"
               value={editedText}
               onChange={(e) => setEditedText(e.target.value)}
+              multiline
+              minRows={4}
+              sx={{ backgroundColor: 'white', borderRadius: '5px' }}
             />
           </FormControl>
-          <Button variant="outlined" color="primary" onClick={handleSave}>
-            Save
-          </Button>
+          <Stack direction='row' spacing={2} sx={{justifyContent: 'end'}}>
+            <Button onClick={toggleEdit} variant='outlined'>Zpět</Button>
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Uložit
+            </Button>
+          </Stack>
         </Stack>
+      </Box>
+      }
+      </>
 
-      )}
-    </Stack>
   );
 }

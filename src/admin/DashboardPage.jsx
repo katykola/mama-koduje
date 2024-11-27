@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import AdminLifePage from './AdminLifePage';
 import AdminHeader from './AdminHeader';
+import AdminLifePage from './AdminLifePage';
+import AdminPostsPage from './AdminPostsPage';
 import { Stack, Typography, Button } from '@mui/material';
 
 function CustomTabPanel(props) {
@@ -60,7 +61,7 @@ export default function DashboardPage() {
             <AdminLifePage/>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            Item Two
+            <AdminPostsPage />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
             Item Three
