@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import { Stack, Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -43,9 +43,8 @@ export default function AdminHeader() {
   return (
     <>
     <AppBar position="static" sx={{ backgroundColor: '#FFEDED', boxShadow: 'none', borderTop: isMobile ? undefined : '1px solid #9C9C9C', borderBottom: '1px solid #9C9C9C' }} >
-      <Toolbar sx={{ width: '100%', justifyContent: 'end' }} >
         {isMobile ? (
-          <>
+          <Toolbar sx={{ width: '100%', justifyContent: 'end' }} >
             <Button variant='outlined' edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
               Menu
             </Button>
@@ -63,16 +62,15 @@ export default function AdminHeader() {
               Odhlásit
             </Button>              
             </Drawer>
-          </>
+          </Toolbar>
         ) : (
-          <>
-            <Typography sx={{ fontSize: '1.2rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
-            <Button variant='contained' color="inherit" onClick={handleLogout}>
-              Odhlásit
-            </Button>          
-            </>
+            <Toolbar sx={{ width: '100%', justifyContent: 'space-between' }} >
+              <Typography sx={{ fontSize: '1.2rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
+              <Button variant='contained' color="inherit" onClick={handleLogout}>
+                Odhlásit
+              </Button>
+            </Toolbar>
         )}
-      </Toolbar>
     </AppBar>
     </>
   );

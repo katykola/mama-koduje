@@ -23,7 +23,7 @@ export default function HomePage({posts, handlePostSelect}) {
           <Typography variant="sectionTitle">RECENZE KURZŮ, BOOTCAMPŮ A KNIH </Typography>
               <Stack  direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               {postsWithAuthor.map((post) => (
-                    <ReviewTile id={post.id} tags={post.tags} rating={post.rating} title={post.title} author={post.author} perex={post.perex} onPostSelect={handlePostSelect}/>
+                    <ReviewTile key={post.id} id={post.id} tags={post.tags} rating={post.rating} title={post.title} author={post.author} perex={post.perex} onPostSelect={handlePostSelect}/>
                     ))}
               </Stack>
               <Stack sx={{ justifyContent: "center", alignItems: "flex-end"}}>
@@ -37,7 +37,7 @@ export default function HomePage({posts, handlePostSelect}) {
                 <Stack spacing={2}>
                     <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
                     {postsWithoutAuthor.map((post) => (
-                    <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect}/>
+                    <PostTile key={post.id} imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect}/>
                     ))}
                 </Stack>
             </Grid>

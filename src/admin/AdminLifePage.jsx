@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Input, Button, FormControl, InputLabel, Typography } from '@mui/material';
+import { Box, Stack, Input, Button, FormControl, InputLabel, Typography } from '@mui/material';
 import { db } from '../config/firebase';
 import { collection, doc, addDoc, getDocs, deleteDoc, updateDoc } from 'firebase/firestore';
 import AdminLifeTile from './AdminLifeTile';
 
 export default function AdminLifePage() {
+
+  const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
 
   const [lifeXPList, setLifeXPList] = useState([]);
 
@@ -80,59 +82,69 @@ export default function AdminLifePage() {
     }
   }
 
+  function toggleCreateNew() {
+    setIsHiddenCreateNew(!isHiddenCreateNew);
+  }
+
   return (
     <>
-
-      {/* Create new LifeTile */}
-      <Stack spacing={5}>
-          <Typography variant='h2'>Nová životní zkušenost</Typography>
-          <Stack spacing={5} >
-            <Stack direction='row' spacing={3} sx={{width: '100%'}}>
-                <FormControl>
-                  <InputLabel htmlFor="order">Pořadí</InputLabel>
-                  <Input
-                    id="order"
-                    value={newLifeXPOrder}
-                    onChange={(e) => setNewLifeXPOrder(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormControl>
-                  <InputLabel htmlFor="date">Měsíc Rok</InputLabel>
-                  <Input
-                    id="date"
-                    value={newLifeXPDate}
-                    onChange={(e) => setNewLifeXPDate(e.target.value)}
-                  />
-                </FormControl>
+  { isHiddenCreateNew ? 
+      <Stack direction='row' sx={{justifyContent: 'end', mb: 4}}><Button onClick={toggleCreateNew} variant='contained'>Přidej novou zkušenost</Button></Stack> 
+      : 
+        <Box sx={{border: '1px solid var(--border-color)', p: 3, mb: 4}}>
+            <Stack spacing={5} >
+              <Stack direction='row' spacing={3} sx={{width: '100%'}}>
+                  <FormControl>
+                    <InputLabel htmlFor="order">Pořadí</InputLabel>
+                    <Input
+                      id="order"
+                      value={newLifeXPOrder}
+                      onChange={(e) => setNewLifeXPOrder(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <InputLabel htmlFor="date">Měsíc Rok</InputLabel>
+                    <Input
+                      id="date"
+                      value={newLifeXPDate}
+                      onChange={(e) => setNewLifeXPDate(e.target.value)}
+                    />
+                  </FormControl>
+              </Stack>
+              <FormControl>
+                <InputLabel htmlFor="title">Název</InputLabel>
+                <Input
+                  id="title"
+                  value={newLifeXPTitle}
+                  onChange={(e) => setNewLifeXPTitle(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <InputLabel htmlFor="subtitle">Podnázev</InputLabel>
+                <Input
+                  id="subtitle"
+                  value={newLifeXPSubtitle}
+                  onChange={(e) => setNewLifeXPSubtitle(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <InputLabel htmlFor="text">Text</InputLabel>
+                <Input
+                  id="text"
+                  value={newLifeXPText}
+                  onChange={(e) => setNewLifeXPText(e.target.value)}
+                />
+              </FormControl>
+              <Stack direction='row' spacing={2} sx={{justifyContent: 'end'}}>
+                <Button onClick={toggleCreateNew} variant='outlined'>Zpět</Button>
+                <Button onClick={onSubmitLifeXP} variant="contained">
+                  Uložit
+                </Button>
+              </Stack>
             </Stack>
-            <FormControl>
-              <InputLabel htmlFor="title">Název</InputLabel>
-              <Input
-                id="title"
-                value={newLifeXPTitle}
-                onChange={(e) => setNewLifeXPTitle(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="subtitle">Podnázev</InputLabel>
-              <Input
-                id="subtitle"
-                value={newLifeXPSubtitle}
-                onChange={(e) => setNewLifeXPSubtitle(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="text">Text</InputLabel>
-              <Input
-                id="text"
-                value={newLifeXPText}
-                onChange={(e) => setNewLifeXPText(e.target.value)}
-              />
-            </FormControl>
-            <Button onClick={onSubmitLifeXP} variant="contained">
-              Přidej
-            </Button>
-          </Stack>
+          </Box>
+      }
+
 
           {/* List all LifeTiles */}
           <Stack spacing={4}>
@@ -151,7 +163,6 @@ export default function AdminLifePage() {
             </Stack>
 
 
-      </Stack>
     </>
   );
 }
