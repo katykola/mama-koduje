@@ -9,10 +9,10 @@ import AdminNewForm from './AdminNewForm';
 export default function AdminPostsPage() {
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [newPostTitle, setNewPostTitle] = useState('');
-  const [newPostDate, setNewPostDate] = useState(new Date());
-  const [newPostPerex, setNewPostPerex] = useState('');
-  const [newPostContent, setNewPostContent] = useState('');
+  const [newTitle, setnewTitle] = useState('');
+  const [newDate, setnewDate] = useState(new Date());
+  const [newPerex, setnewPerex] = useState('');
+  const [newContent, setnewContent] = useState('');
   const [errors, setErrors] = useState({});
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function AdminPostsPage() {
           ...doc.data(),
           id: doc.id,
         }))
-        .filter((post) => !post.author); // Filter out posts with an author
+        .filter((post) => !post.author); 
       setPosts(filteredData);
     } catch (err) {
       console.log(err);
@@ -39,10 +39,10 @@ export default function AdminPostsPage() {
 
   function validateFields() {
     const newErrors = {};
-    if (!newPostTitle) newErrors.title = 'Název je povinné';
-    if (!newPostDate) newErrors.date = 'Datum je povinné';
-    if (!newPostPerex) newErrors.perex = 'Perex je povinné';
-    if (!newPostContent) newErrors.content = 'Obsah je povinné';
+    if (!newTitle) newErrors.title = 'Název je povinné';
+    if (!newDate) newErrors.date = 'Datum je povinné';
+    if (!newPerex) newErrors.perex = 'Perex je povinné';
+    if (!newContent) newErrors.content = 'Obsah je povinné';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -52,16 +52,16 @@ export default function AdminPostsPage() {
 
     try {
       await addDoc(collection(db, 'posts'), {
-        title: newPostTitle,
-        date: newPostDate ? newPostDate.toISOString() : null,
-        perex: newPostPerex,
-        content: newPostContent,
+        title: newTitle,
+        date: newDate ? newDate.toISOString() : null,
+        perex: newPerex,
+        content: newContent,
       });
       getPosts();
-      setNewPostTitle('');
-      setNewPostDate(new Date());
-      setNewPostPerex('');
-      setNewPostContent('');
+      setnewTitle('');
+      setnewDate(new Date());
+      setnewPerex('');
+      setnewContent('');
       toggleCreateNew();
     } catch (err) {
       console.log(err);
@@ -110,25 +110,25 @@ export default function AdminPostsPage() {
   }
 
   const fields = [
-    { name: 'title', label: 'Titulek', value: newPostTitle, required: true },
-    { name: 'date', label: 'Datum', value: newPostDate, required: true, type: 'date' },
-    { name: 'perex', label: 'Perex', value: newPostPerex, required: true },
-    { name: 'content', label: 'Obsah článku', value: newPostContent, required: true, multiline: true, minRows: 4 },
+    { name: 'title', label: 'Titulek', value: newTitle, required: true },
+    { name: 'date', label: 'Datum', value: newDate, required: true, type: 'date' },
+    { name: 'perex', label: 'Perex', value: newPerex, required: true },
+    { name: 'content', label: 'Obsah článku', value: newContent, required: true, multiline: true, minRows: 4 },
   ];
 
   const handleFieldChange = (name, value) => {
     switch (name) {
       case 'title':
-        setNewPostTitle(value);
+        setnewTitle(value);
         break;
       case 'date':
-        setNewPostDate(value);
+        setnewDate(value);
         break;
       case 'perex':
-        setNewPostPerex(value);
+        setnewPerex(value);
         break;
       case 'content':
-        setNewPostContent(value);
+        setnewContent(value);
         break;
       default:
         break;
@@ -169,7 +169,7 @@ export default function AdminPostsPage() {
       </Stack>
 
       <AdminDeleteDialog isDialogOpen={isDialogOpen} closeDialog={closeDialog} handleDeleteDoc={handleDeleteDoc} />
-      
+
     </Stack>
   );
 }

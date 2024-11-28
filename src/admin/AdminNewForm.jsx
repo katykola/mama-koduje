@@ -3,6 +3,7 @@ import { Box, Button, TextField, Stack, Typography, FormControl } from '@mui/mat
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ArrayField from './AdminArrayField';
 
 export default function AdminNewForm({
   title,
@@ -11,6 +12,7 @@ export default function AdminNewForm({
   onChange,
   onSubmit,
   onCancel,
+  existingTags, // Add existingTags prop
 }) {
   return (
     <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
@@ -36,6 +38,14 @@ export default function AdminNewForm({
                     )}
                   />
                 </LocalizationProvider>
+              ) : field.type === 'array' ? (
+                <ArrayField
+                  label={field.label}
+                  values={field.value}
+                  onChange={(newValue) => onChange(field.name, newValue)}
+                  existingItems={existingTags} // Pass existingTags to ArrayField
+                  isTagsField={field.name === 'tags'} // Pass isTagsField prop
+                />
               ) : (
                 <TextField
                   required={field.required}

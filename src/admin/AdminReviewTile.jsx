@@ -59,6 +59,7 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
         <Stack spacing={2} sx={{ border: '1px solid var(--border-color)', p: 2 }}>
           <Typography>{formattedDate}</Typography>
           <Typography variant='tileTitle'>{title}</Typography>
+          <Typography>{author}</Typography>
           <Typography>{perex}</Typography>
           <Stack direction='row' spacing={2} sx={{ justifyContent: 'end' }}>
             <Button variant="outlined" onClick={toggleEdit}>Editovat</Button>
@@ -73,14 +74,29 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
               case 'title':
                 setEditedTitle(value);
                 break;
+              case 'author':
+                setEditedAuthor(value);
+                break;              
               case 'date':
                 setEditedDate(value);
+                break;
+              case 'rating':
+                setEditedRating(value);
                 break;
               case 'perex':
                 setEditedPerex(value);
                 break;
               case 'content':
                 setEditedContent(value);
+                break;
+              case 'positives':
+                setEditedPositives(value);
+                break;              
+              case 'negatives':
+                setEditedNegatives(value);
+                break;              
+              case 'link':
+                setEditedLink(value);
                 break;
               default:
                 break;
