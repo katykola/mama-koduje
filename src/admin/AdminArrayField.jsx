@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Stack, TextField, Button, IconButton, InputAdornment } from '@mui/material';
+import { Stack, TextField, Button, IconButton, InputAdornment, Typography } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 
-export default function ArrayField({ label, values, onChange, existingItems, isTagsField }) {
+export default function ArrayField({ label, values, onChange, existingItems, isTagsField, error, helperText }) {
   const [inputValue, setInputValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -38,6 +38,7 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
 
   if (isTagsField) {
     return (
+      <>
       <Stack spacing={2}>
         <Stack direction='row' spacing={1} flexWrap='wrap'>
           {existingItems.map((item, index) => (
@@ -80,14 +81,19 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
                   </InputAdornment>
                 ),
               }}
-            />
-          ))}
+              />
+            ))}
         </Stack>
       </Stack>
+      {error && (
+        <Typography variant='caption' color='error'>{helperText}</Typography>
+      )}      
+      </>
     );
   }
 
   return (
+    <>
     <Stack spacing={2}>
       <Stack direction='row' spacing={1} alignItems='center'>
         <TextField
@@ -119,9 +125,14 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
               ),
             }}
             sx={{ color: 'white', backgroundColor: 'var(--primary-color)', border: '1px solid var(--secondary-color)', borderRadius: '5px', flexGrow: 1 }}
+
           />
         ))}
       </Stack>
-    </Stack>
+     </Stack>
+      {error && (
+        <Typography variant='caption' color='error'>{helperText}</Typography>
+      )}   
+    </>
   );
 }

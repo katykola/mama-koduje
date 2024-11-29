@@ -3,7 +3,8 @@ import { Box, Button, TextField, Stack, Typography, FormControl } from '@mui/mat
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import ArrayField from './AdminArrayField';
+import { Rating } from '@mui/material';
+import AdminArrayField from './AdminArrayField';
 
 export default function AdminNewForm({
   title,
@@ -13,7 +14,9 @@ export default function AdminNewForm({
   onSubmit,
   onCancel,
   existingTags, // Add existingTags prop
-}) {
+}) 
+{
+  
   return (
     <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
       <Stack spacing={5}>
@@ -39,13 +42,42 @@ export default function AdminNewForm({
                   />
                 </LocalizationProvider>
               ) : field.type === 'array' ? (
-                <ArrayField
+                <AdminArrayField
                   label={field.label}
                   values={field.value}
                   onChange={(newValue) => onChange(field.name, newValue)}
                   existingItems={existingTags} // Pass existingTags to ArrayField
                   isTagsField={field.name === 'tags'} // Pass isTagsField prop
+                  required={field.required}
+                  error={!!errors[field.name]}
+                  helperText={errors[field.name]}
                 />
+              ) : field.type === 'number' ? (
+                <TextField
+                  required={field.required}
+                  label={field.label}
+                  id={field.name}
+                  value={field.value}
+                  onChange={(e) => onChange(field.name, e.target.value)}
+                  error={!!errors[field.name]}
+                  helperText={errors[field.name]}
+                  type="number"
+                  sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+                />
+              ) : field.name === 'rating' ? (
+                <FormControl fullWidth>
+                  <Typography component="legend">{field.label}</Typography>
+                  <Rating
+                    name={field.name}
+                    value={field.value}
+                    onChange={(event, newValue) => onChange(field.name, newValue)}
+                  />
+                  {errors[field.name] && (
+                    <Typography variant="caption" color="error">
+                      {errors[field.name]}
+                    </Typography>
+                  )}
+                </FormControl>
               ) : (
                 <TextField
                   required={field.required}

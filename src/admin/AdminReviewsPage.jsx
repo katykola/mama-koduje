@@ -12,7 +12,7 @@ export default function AdminReviewsPage() {
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
   const [newDate, setNewDate] = useState(new Date());
-  const [newRating, setNewRating] = useState('');
+  const [newRating, setNewRating] = useState(0);
   const [newPerex, setNewPerex] = useState('');
   const [newContent, setNewContent] = useState('');
   const [newPositives, setNewPositives] = useState([]);
@@ -40,9 +40,14 @@ export default function AdminReviewsPage() {
   function validateFields() {
     const newErrors = {};
     if (!newTitle) newErrors.title = 'Název je povinné';
+    if (!newAuthor) newErrors.author = 'Autor je povinný';
     if (!newDate) newErrors.date = 'Datum je povinné';
     if (!newPerex) newErrors.perex = 'Perex je povinné';
     if (!newContent) newErrors.content = 'Obsah je povinné';
+    if (newRating < 1 || newRating > 5) newErrors.rating = 'Hodnocení musí být mezi 1 a 5';
+    if (newPositives.length === 0) newErrors.positives = 'Musíš vyplnit alespoň jedno pozitivum';
+    if (newNegatives.length === 0) newErrors.negatives = 'Musíš vyplnit alespoň jedno negativum';
+    if (newLink && !newLink.match(/^(http|https):\/\//)) newErrors.link = 'Odkaz musí mít formát http:// nebo https://';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -69,7 +74,7 @@ export default function AdminReviewsPage() {
     setNewTitle('');
     setNewAuthor('');
     setNewDate(new Date());
-    setNewRating('');
+    setNewRating(0);
     setNewPerex('');
     setNewContent('');
     setNewPositives([]);
@@ -79,20 +84,16 @@ export default function AdminReviewsPage() {
     toggleCreateNew();
   }
 
-  async function handleDeleteDoc() {
-    if (docToDelete) {
-      await deleteDocument('posts', docToDelete);
-      const postsData = await fetchCollection('posts');
-      const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
-      setPosts(filteredData);
-      setIsDialogOpen(false);
-      setDocToDelete(null);
-    }
+  async function handleDeleteDoc(id) {
+    await deleteDocument('posts', id);
+    const postsData = await fetchCollection('posts');
+    const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
+    setPosts(filteredData);
   }
 
-  async function updatePost(id, date, title, author, rating, perex, content, positives, negatives, link) {
+  async function updatePost(id, tags, title, author, date, rating, perex, content, positives, negatives, link) {
     await updateDocument('posts', id, {
-      tags: newTags,
+      tags,
       date,
       title,
       author,
@@ -127,7 +128,7 @@ export default function AdminReviewsPage() {
     { name: 'title', label: 'Titulek', value: newTitle, required: true },
     { name: 'author', label: 'Autor', value: newAuthor, required: true },
     { name: 'date', label: 'Datum', value: newDate, required: true, type: 'date' },
-    { name: 'rating', label: 'Hodnocení', value: newRating },
+    { name: 'rating', label: 'Hodnocení', value: newRating, type: 'number' },
     { name: 'perex', label: 'Perex', value: newPerex, required: true },
     { name: 'content', label: 'Obsah článku', value: newContent, required: true, multiline: true, minRows: 4 },
     { name: 'positives', label: 'Pozitiva', value: newPositives, type: 'array' },
@@ -206,6 +207,8 @@ export default function AdminReviewsPage() {
             positives={post.positives}
             negatives={post.negatives}
             link={post.link}
+            deletePost={handleDeleteDoc} // Pass deletePost function
+            updatePost={updatePost} // Pass updatePost function
           />
         ))}
       </Stack>

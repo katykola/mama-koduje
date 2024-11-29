@@ -45,7 +45,7 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
     { name: 'title', label: 'Titulek', value: editedTitle },
     { name: 'author', label: 'Autor', value: editedAuthor },
     { name: 'date', label: 'Datum', value: editedDate, type: 'date' },
-    { name: 'rating', label: 'Hodnocení', value: editedRating },
+    { name: 'rating', label: 'Hodnocení', value: editedRating, type: 'number' },
     { name: 'perex', label: 'Perex', value: editedPerex },
     { name: 'content', label: 'Obsah článku', value: editedContent, multiline: true, minRows: 4 },
     { name: 'positives', label: 'Pozitiva', value: editedPositives },
@@ -60,7 +60,6 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
           <Typography>{formattedDate}</Typography>
           <Typography variant='tileTitle'>{title}</Typography>
           <Typography>{author}</Typography>
-          <Typography>{perex}</Typography>
           <Stack direction='row' spacing={2} sx={{ justifyContent: 'end' }}>
             <Button variant="outlined" onClick={toggleEdit}>Editovat</Button>
             <Button variant="outlined" onClick={() => deletePost(id)}>Vymazat</Button>
