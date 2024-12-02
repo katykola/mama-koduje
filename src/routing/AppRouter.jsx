@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Box } from "@mui/material";
-import Header from './Header'; 
-import Footer from './Footer';
-import Wrapper from './Wrapper';
+import Header from '../components/Header'; 
+import Footer from '../components/Footer';
+import Wrapper from '../components/Wrapper';
 import HomePage from '../pages/HomePage';
 import AboutPage from '../pages/AboutPage';
 import ReviewPage from '../pages/ReviewPage';
 import PostPage from '../pages/PostPage';
 import PostDetailPage from '../pages/PostDetailPage';
+import ReviewDetailPage from '../pages/ReviewDetailPage';
 import LoginPage from '../admin/LoginPage';
 import PrivateRoute from '../admin/PrivateRoute';
 import DashboardPage from '../admin/DashboardPage';
@@ -23,6 +24,7 @@ export default function AppRouter() {
   const { currentUser } = useAuth();
 
   const [posts, setPosts] = useState([]);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   async function getPosts() {
     try {
@@ -41,9 +43,8 @@ export default function AppRouter() {
     getPosts();
   }, []);
 
-  const handlePostSelect = (id) => {
-    console.log('Selected Post ID:', id);
-    setSelectedPostId(id);
+  const handlePostSelect = () => {
+    navigate(`/post/${urlTitle}`);
   };
 
   return (
@@ -65,7 +66,8 @@ export default function AppRouter() {
           <Route path="/recenze" element={<Wrapper sx={{ flex: 1 }}><ReviewPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
           <Route path="/ze-zivota" element={<Wrapper sx={{ flex: 1 }}><PostPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
           <Route path="/o-me" element={<Wrapper sx={{ flex: 1 }}><AboutPage /></Wrapper>} />
-          <Route path="/post/:id" element={<Wrapper sx={{ flex: 1 }}><PostDetailPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
+          <Route path="/post/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><PostDetailPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
+          <Route path="/recenze/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><ReviewDetailPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
         </Routes>
         <Footer />
       </Box>

@@ -1,13 +1,14 @@
 import { Box, Stack, Typography, Rating, Link } from "@mui/material";
+import { Link as RouterLink } from 'react-router-dom';
 
-export default function ReviewTile({ id, title, author, perex, tags, rating, onPostSelect }) {
-    
+export default function ReviewTile({ id, title, urlTitle, author, perex, tags, rating, onPostSelect }) {
+   
     return(
         <>
          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
              <Stack direction='row' spacing={1}>
-            {tags.map((tag, i) => (
-                    <Typography key={i} sx={{ fontSize: '1rem', fontFamily:'Inria Sans', fontWeight: '300', color: 'white', backgroundColor:'var(--secondary-color)', p: '0.5rem' }}>{tag}</Typography>
+            {tags.map((tag, id) => (
+                    <Typography key={id} sx={{ fontSize: '1rem', fontFamily:'Inria Sans', fontWeight: '300', color: 'white', backgroundColor:'var(--secondary-color)', p: '0.5rem' }}>{tag}</Typography>
                 ))}
                 </Stack>
             <Rating

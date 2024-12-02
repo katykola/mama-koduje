@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Stack, Button, Typography, FormControl, TextField } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 import AdminEditForm from './AdminEditForm';
+import { validateFields } from '../config/validation'; // Import validateFields function
 
 export default function AdminPostTile({ id, title, date, perex, content, deletePost, updatePost }) {
+  
   // Convert the date string to a Date object if it's not already a Date object
   let dateObject = typeof date === 'string' ? new Date(date) : date;
   // Check if dateObject is a valid Date object
@@ -22,22 +24,25 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
   const [editedDate, setEditedDate] = useState(dateObject);
   const [editedPerex, setEditedPerex] = useState(perex);
   const [editedContent, setEditedContent] = useState(content);
+  const [errors, setErrors] = useState({}); 
+
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
   const handleSave = () => {
+    const newErrors = validateFields({
+      title: editedTitle,
+      date: editedDate,
+      perex: editedPerex,
+      content: editedContent,
+    }, true, false);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     updatePost(id, editedDate.toISOString(), editedTitle, editedPerex, editedContent);
     setIsEditing(false);
   };
-
-  const fields = [
-    { name: 'title', label: 'Titulek', value: editedTitle },
-    { name: 'date', label: 'Datum', value: editedDate, type: 'date' },
-    { name: 'perex', label: 'Perex', value: editedPerex },
-    { name: 'content', label: 'Obsah článku', value: editedContent, multiline: true, minRows: 4 },
-  ];
 
   return (
     <>
@@ -53,7 +58,15 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
         </Stack>
       ) : (
         <AdminEditForm
-          fields={fields}
+        values={{
+          title: editedTitle,
+          date: editedDate,
+          perex: editedPerex,
+          content: editedContent,
+         }}
+          isPost = {true}
+          errors={errors}
+
           onChange={(name, value) => {
             switch (name) {
               case 'title':

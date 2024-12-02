@@ -22,6 +22,7 @@ export default function AdminReviewsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
   const [existingTags, setExistingTags] = useState([]);
+  const [urlTitle, setUrlTitle] = useState(null);
 
   useEffect(() => {
     async function loadPosts() {
@@ -69,6 +70,7 @@ export default function AdminReviewsPage() {
     });
     const postsData = await fetchCollection('posts');
     const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
+
     setPosts(filteredData);
     setNewTags([]);
     setNewTitle('');
@@ -172,6 +174,8 @@ export default function AdminReviewsPage() {
         break;
     }
   };
+
+  console.log('urlTitle:', urlTitle);
 
   return (
     <Stack spacing={3}>

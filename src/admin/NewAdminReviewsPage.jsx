@@ -6,13 +6,12 @@ import { db } from '../config/firebase'; // Import db from your Firebase config
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
 import NewAdminReviewTile from './NewAdminReviewTile';
+import { getFields } from '../config/formFields'; // Import getFields function
+import { validateFields } from '../config/validation'; // Import validateFields function
 
 export default function NewAdminReviewsPage() {
-
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
-
   const [posts, setPosts] = useState([]);
-
   const [newTags, setnewTags] = useState([]);
   const [newTitle, setnewTitle] = useState('');
   const [newAuthor, setnewAuthor] = useState('');
@@ -23,16 +22,13 @@ export default function NewAdminReviewsPage() {
   const [newPositives, setnewPositives] = useState([]);
   const [newNegatives, setnewNegatives] = useState([]);
   const [newLink, setnewLink] = useState('');
-
   const [errors, setErrors] = useState({});
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
   const [existingTags, setExistingTags] = useState([]);
-
+  const [urlTitle, setUrlTitle] = useState('');
 
   // Getting data from Firebase
-
   async function getPosts() {
     try {
       const data = await getDocs(collection(db, "posts"));
@@ -44,7 +40,6 @@ export default function NewAdminReviewsPage() {
         .filter((post) => post.author); 
       setPosts(filteredData);
       loadTags(filteredData); // Load tags from the filtered posts data
-
     } catch (err) {
       console.error('Error loading posts:', err);
     }
@@ -64,28 +59,41 @@ export default function NewAdminReviewsPage() {
   }, []);
 
   // Adding a new document
-
   function toggleCreateNew() {
     setIsHiddenCreateNew(!isHiddenCreateNew);
   }
 
-  function validateFields() {
-    const newErrors = {};
-    console.log(newTags);
-    if (newTags.length === 0) newErrors.tags = 'Musíte vybrat alespoň jeden štítek';
-    if (!newTitle) newErrors.title = 'Název je povinné';
-    if (!newDate) newErrors.date = 'Datum je povinné';
-    if (newRating < 1 || newRating > 5) newErrors.rating = 'Hodnocení musí být mezi 1 a 5';
-    if (!newPerex) newErrors.perex = 'Perex je povinné';
-    if (!newContent) newErrors.content = 'Obsah je povinné';
-    if (newPositives.length === 0) newErrors.positives = 'Musíte vyplnit alespoň jedno pozitivum';
-    if (newNegatives.length === 0) newErrors.negatives = 'Musíte vyplnit alespoň jedno negativum';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }
+  const generateUrlTitle = (title) => {
+    const czechMap = {
+      'á': 'a', 'č': 'c', 'ď': 'd', 'é': 'e', 'ě': 'e', 'í': 'i', 'ň': 'n', 'ó': 'o', 'ř': 'r', 'š': 's', 'ť': 't', 'ú': 'u', 'ů': 'u', 'ý': 'y', 'ž': 'z',
+      'Á': 'A', 'Č': 'C', 'Ď': 'D', 'É': 'E', 'Ě': 'E', 'Í': 'I', 'Ň': 'N', 'Ó': 'O', 'Ř': 'R', 'Š': 'S', 'Ť': 'T', 'Ú': 'U', 'Ů': 'U', 'Ý': 'Y', 'Ž': 'Z'
+    };
+  
+    return title
+      .split('')
+      .map(char => czechMap[char] || char)
+      .join('')
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  };
 
   async function onSubmitPost() {
-    if (!validateFields()) return;
+    const newErrors = validateFields({
+      tags: newTags,
+      title: newTitle,
+      date: newDate,
+      rating: newRating,
+      perex: newPerex,
+      content: newContent,
+      positives: newPositives,
+      negatives: newNegatives,
+    });
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    
+    const generatedUrlTitle = generateUrlTitle(newTitle);
+    setUrlTitle(generatedUrlTitle);
 
     try {
       await addDoc(collection(db, 'posts'), {
@@ -99,10 +107,13 @@ export default function NewAdminReviewsPage() {
         positives: newPositives,
         negatives: newNegatives,
         link: newLink,
+        urlTitle: generatedUrlTitle,
       });
+      console.log(urlTitle);
       getPosts();
       setnewTags([]);
       setnewTitle('');
+      setnewAuthor('');
       setnewDate(new Date());
       setnewRating(0);
       setnewPerex('');
@@ -110,24 +121,12 @@ export default function NewAdminReviewsPage() {
       setnewPositives([]);
       setnewNegatives([]);
       setnewLink('');
+      setUrlTitle('');
       toggleCreateNew();
     } catch (err) {
       console.log(err);
     }
   }
-
-  const fields = [
-    { name: 'tags', label: 'Tagy', value: newTags, required: true, type: 'array' },
-    { name: 'title', label: 'Titulek', value: newTitle, required: true },
-    { name: 'author', label: 'Autor', value: newAuthor, required: true },
-    { name: 'date', label: 'Datum', value: newDate, required: true, type: 'date' },
-    { name: 'rating', label: 'Hodnocení', value: newRating, required: true, type: 'number' },
-    { name: 'perex', label: 'Perex', value: newPerex, required: true },
-    { name: 'content', label: 'Obsah článku', value: newContent, required: true, multiline: true, minRows: 4 },
-    { name: 'positives', label: 'Pozitiva', value: newPositives, required: true, type: 'array' },
-    { name: 'negatives', label: 'Negativa', value: newNegatives, required: true, type: 'array' },
-    { name: 'link', label: 'Odkaz', value: newLink, required: false },
-  ];
 
   const handleFieldChange = (name, value) => {
     switch (name) {
@@ -167,7 +166,6 @@ export default function NewAdminReviewsPage() {
   };
 
   // Deleting a document
-
   async function handleDeleteDoc() {
     try {
       if (docToDelete) {
@@ -192,7 +190,6 @@ export default function NewAdminReviewsPage() {
   }
 
   // Updating a document
-
   async function updatePost(id, tags, title, author, date, rating, perex, content, positives, negatives, link) {
     try {
       await updateDocument('posts', id, {
@@ -215,19 +212,27 @@ export default function NewAdminReviewsPage() {
     }
   }
 
-  console.log(errors);
-
   return (
     <>
-
-    {isHiddenCreateNew ? (
+      {isHiddenCreateNew ? (
         <Stack direction='row' sx={{ justifyContent: 'end', mb: 4 }}>
-          <Button onClick={toggleCreateNew} variant='contained'>Přidej nový článek</Button>
+          <Button onClick={toggleCreateNew} variant='contained'>Přidej novou recenzi</Button>
         </Stack>
       ) : (
         <AdminNewForm
           title="Nová recenze"
-          fields={fields}
+          fields={getFields({
+            tags: newTags,
+            title: newTitle,
+            author: newAuthor,
+            date: newDate,
+            rating: newRating,
+            perex: newPerex,
+            content: newContent,
+            positives: newPositives,
+            negatives: newNegatives,
+            link: newLink,
+          })}
           errors={errors}
           existingTags={existingTags}
           onChange={handleFieldChange}
@@ -254,6 +259,7 @@ export default function NewAdminReviewsPage() {
             deletePost={() => openDialog(post.id)}
             updatePost={updatePost} 
             existingTags={existingTags} // Pass existingTags to NewAdminReviewTile
+            errors={errors}
           />
         ))}
       </Stack>

@@ -6,6 +6,7 @@ import AdminPostTile from './AdminPostTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
 
+
 export default function AdminPostsPage() {
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -13,6 +14,7 @@ export default function AdminPostsPage() {
   const [newDate, setnewDate] = useState(new Date());
   const [newPerex, setnewPerex] = useState('');
   const [newContent, setnewContent] = useState('');
+  const [urlTitle, setUrlTitle] = useState('');
   const [errors, setErrors] = useState({});
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -37,6 +39,21 @@ export default function AdminPostsPage() {
     getPosts();
   }, []);
 
+  const generateUrlTitle = (title) => {
+    const czechMap = {
+      'á': 'a', 'č': 'c', 'ď': 'd', 'é': 'e', 'ě': 'e', 'í': 'i', 'ň': 'n', 'ó': 'o', 'ř': 'r', 'š': 's', 'ť': 't', 'ú': 'u', 'ů': 'u', 'ý': 'y', 'ž': 'z',
+      'Á': 'A', 'Č': 'C', 'Ď': 'D', 'É': 'E', 'Ě': 'E', 'Í': 'I', 'Ň': 'N', 'Ó': 'O', 'Ř': 'R', 'Š': 'S', 'Ť': 'T', 'Ú': 'U', 'Ů': 'U', 'Ý': 'Y', 'Ž': 'Z'
+    };
+  
+    return title
+      .split('')
+      .map(char => czechMap[char] || char)
+      .join('')
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  };
+
   function validateFields() {
     const newErrors = {};
     if (!newTitle) newErrors.title = 'Název je povinné';
@@ -50,18 +67,23 @@ export default function AdminPostsPage() {
   async function onSubmitPost() {
     if (!validateFields()) return;
 
+    const generatedUrlTitle = generateUrlTitle(newTitle);
+    setUrlTitle(generatedUrlTitle);
+
     try {
       await addDoc(collection(db, 'posts'), {
         title: newTitle,
         date: newDate ? newDate.toISOString() : null,
         perex: newPerex,
         content: newContent,
+        urlTitle: generatedUrlTitle,
       });
       getPosts();
       setnewTitle('');
       setnewDate(new Date());
       setnewPerex('');
       setnewContent('');
+      setUrlTitle('');
       toggleCreateNew();
     } catch (err) {
       console.log(err);

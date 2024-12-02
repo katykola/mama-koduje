@@ -58,7 +58,7 @@ export default function AdminNewForm({
                   label={field.label}
                   id={field.name}
                   value={field.value}
-                  onChange={(e) => onChange(field.name, e.target.value)}
+                  onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                   type="number"
@@ -70,8 +70,8 @@ export default function AdminNewForm({
                   <Rating
                     name={field.name}
                     value={field.value}
-                    onChange={(event, newValue) => onChange(field.name, newValue)}
-                  />
+                    onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
+                    />
                   {errors[field.name] && (
                     <Typography variant="caption" color="error">
                       {errors[field.name]}

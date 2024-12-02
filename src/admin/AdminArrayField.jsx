@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack, TextField, Button, IconButton, InputAdornment, Typography } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 
-export default function ArrayField({ label, values, onChange, existingItems, isTagsField, error, helperText }) {
+export default function ArrayField({ label, values, onChange, existingItems, isTagsField, isPost, error, helperText }) {
   const [inputValue, setInputValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -36,7 +36,7 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
     onChange(newValues);
   };
 
-  if (isTagsField) {
+  if (isTagsField && !isPost) {
     return (
       <>
       <Stack spacing={2}>

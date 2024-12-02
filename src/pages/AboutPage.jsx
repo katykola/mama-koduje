@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Divider } from '@mui/material';
 import MainImage from "../components/MainImage"
 import LifeTile from "../components/LifeTile"
 import { db } from "../config/firebase";
@@ -48,6 +48,8 @@ export default function AboutPage() {
             <Typography variant='body1'>Věřím, že nikdy není pozdě začít a podle tohoto hesla se řídím celý život. Stačí jen překonat počáteční strach.</Typography>
           </Box>
 
+          <Divider />
+
           <Typography variant='sectionTitle'>JAK HOLČIČKA EMA ROSTLA S NÍ MOJE RODIČOVSKÉ A PROGRAMÁTORSKÉ SKILLY</Typography>
 
 
@@ -57,6 +59,7 @@ export default function AboutPage() {
             <Stack sx={{ml: '-6rem'}} spacing={4}>
                 {lifeXPList.map((lifeXP) => (
                     <LifeTile
+                      key={lifeXP.id}
                       imgSrc="/littlehand_desktop.jpg"
                       order={ lifeXP.order }
                       date={ lifeXP.date }

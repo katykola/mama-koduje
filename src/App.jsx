@@ -4,7 +4,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from './contexts/AuthContext';
 import theme from './theme';
 import './styles.css'
-import AppRouter from './components/AppRouter';
+import ScrollToTop from './routing/ScrollToTop';
+import AppRouter from './routing/AppRouter';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <Router>
+          <ScrollToTop/>
           <AppRouter/>
         </Router>
       </AuthProvider>

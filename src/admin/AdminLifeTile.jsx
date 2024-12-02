@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Link, Stack, Button, useMediaQuery, FormControl } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AdminEditForm from './AdminEditForm';
+import { validateFields } from '../config/validation'; // Import validateFields function
 
 export default function AdminLifeTile({ id, order, date, title, subtitle, text, deleteLifeXP, updateLifeXP }) {
   const theme = useTheme();
@@ -15,22 +16,26 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
   const [editedSubtitle, setEditedSubtitle] = useState(subtitle);
   const [editedText, setEditedText] = useState(text);
 
+  const [errors, setErrors] = useState({});
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
   const handleSave = () => {
+    const newErrors = validateFields({
+      order: editedOrder,
+      date: editedDate,
+      title: editedTitle,
+      subtitle: editedSubtitle,
+      text: editedText,
+    }, false, true);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
     updateLifeXP(id, editedOrder, editedDate, editedTitle, editedSubtitle, editedText);
     setIsEditing(false);
   };
 
-  const fields = [
-    { name: 'order', label: 'Pořadí', value: editedOrder },
-    { name: 'date', label: 'Datum', value: editedDate, type: 'date' },
-    { name: 'title', label: 'Název', value: editedTitle },
-    { name: 'subtitle', label: 'Podnázev', value: editedSubtitle },
-    { name: 'text', label: 'Text', value: editedText, multiline: true, minRows: 4 },
-  ];
 
   return (
     <>
@@ -102,7 +107,15 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
         </Stack>
       ) : (
         <AdminEditForm
-          fields={fields}
+        values={{
+          order: editedOrder,
+          date: editedDate,
+          title: editedTitle,
+          subtitle: editedSubtitle,
+          text: editedText,
+         }}
+         isLifeXP={true}
+         errors={errors}
           onChange={(name, value) => {
             switch (name) {
               case 'order':

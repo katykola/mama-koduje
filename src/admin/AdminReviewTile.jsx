@@ -29,8 +29,6 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
   const [editedNegatives, setEditedNegatives] = useState(negatives);
   const [editedLink, setEditedLink] = useState(link);
 
-
-
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };

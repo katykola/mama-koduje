@@ -5,7 +5,12 @@ export default function PostTile( { id, date, title, imgSrc, perex} ) {
 
   const navigate = useNavigate();
 
-  const dateObject = date.toDate();
+  // Convert the date string to a Date object if it's not already a Date object
+  let dateObject = typeof date === 'string' ? new Date(date) : date;
+  // Check if dateObject is a valid Date object
+  if (!(dateObject instanceof Date) || isNaN(dateObject)) {
+    dateObject = new Date();
+  }
 
   const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
     day: '2-digit',
@@ -14,7 +19,7 @@ export default function PostTile( { id, date, title, imgSrc, perex} ) {
   });
 
   const handlePostSelect = () => {
-    navigate(`/post/${id}`);
+    navigate(`/post/${urlTitle}`);
   };
 
     return(
