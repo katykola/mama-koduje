@@ -1,23 +1,20 @@
 import { useParams } from 'react-router-dom';
-import { Stack, Typography } from '@mui/material';
+import { Stack, Grid, Box, Typography, Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import MainImage from '../components/MainImage';
 import PostTile from '../components/PostTile';
 
-export default function PostDetailPage({ posts, handlePostSelect }) {
-  const { id } = useParams();
-  const post = posts.find(post => post.id === id);
+export default function PostDetailPage({ posts }) {
 
+  const { urlTitle } = useParams();
+  const post = posts.find(post => post.urlTitle === urlTitle);
   const postsWithoutAuthor = posts.filter(post => !post.author);
 
-
   if (!post) {
-    return <Typography>Loading...</Typography>;
+    return <Typography>Článek nenalezen</Typography>;
   }
 
-  // Check if date is defined and has a toDate method
   const dateObject = post.date && post.date.toDate ? post.date.toDate() : new Date();
-
-  // Format the date to DD.MM.YYYY
   const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
     day: '2-digit',
     month: '2-digit',
@@ -27,21 +24,30 @@ export default function PostDetailPage({ posts, handlePostSelect }) {
   return (
     <>
       <Stack spacing={6}>
-        <Stack spacing={3} sx={{ border: '1px solid grey', p: 3 }}>
+
+        <Stack spacing={3} sx={{ border: '1px solid var(--border-color)', px: 10, py: 4 }}>
           <Typography>{formattedDate}</Typography>
           <Typography variant="h1">{post.title}</Typography>
-          <Typography variant="body1">{post.perex}</Typography>
+          <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
           <MainImage imgSrc="/littlehand_desktop.jpg" />
           <Typography variant='body1'>{post.content}</Typography>
         </Stack>
-        <Stack spacing={2}>
-          <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
-            {postsWithoutAuthor.map((post) => (
-              <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect}/>
-            ))}
-        </Stack>
-      </Stack>
 
+        <Box>
+          <Stack direction='row' justifyContent='space-between' alignItems='center'  sx={{ mb: 2 }} >
+            <Typography variant='sectionTitle'>Další články o životě</Typography>
+            <Link variant='body1' component={RouterLink} to='/ze-zivota'>Všechny články</Link>
+          </Stack>
+          <Grid container >
+              {postsWithoutAuthor.slice(0,2).map((post, index) => (
+                <Grid item xs={12} sm={6} md={6} key={post.id} sx={{ display: 'flex', ...(index === 1 && { pl: 2 }) }}>
+                  <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} key={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
+                </Grid>
+              ))}
+          </Grid>
+        </Box>
+        
+      </Stack>
     </>
   );
 } 

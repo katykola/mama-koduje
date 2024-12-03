@@ -31,14 +31,13 @@ export default function HomePage({posts, handlePostSelect}) {
                   title={post.title}  
                   author={post.author}
                   perex={post.perex}
-                  onPostSelect={handlePostSelect}
                   sx={{ width: '100%',  display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
                 />
               </Grid>
             ))}
           </Grid>
               <Stack sx={{ justifyContent: "center", alignItems: "flex-end"}}>
-              <Link component={RouterLink} to='/o-me'><Button variant="contained">Zobrazit všechny recenze</Button></Link>
+              <Link component={RouterLink} to='/recenze'><Button variant="contained">Zobrazit všechny recenze</Button></Link>
               </Stack>
         </Stack>
 
@@ -47,8 +46,8 @@ export default function HomePage({posts, handlePostSelect}) {
             <Grid item xs={12} md={6}>
                 <Stack spacing={4}>
                     <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
-                    {postsWithoutAuthor.map((post) => (
-                    <PostTile key={post.id} imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect}/>
+                    {postsWithoutAuthor.slice(0, 3).map((post) => (
+                    <PostTile key={post.id} imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
                     ))}
                 </Stack>
             </Grid>

@@ -11,7 +11,7 @@ export default function PostPage({posts, handlePostSelect}) {
     <Grid container spacing={4}>
       {postsWithoutAuthor.map((post) => (
         <Grid item xs={12} sm={6} md={6} key={post.id} sx={{ display: 'flex' }}>
-          <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} date={post.date} perex={post.perex} onPostSelect={handlePostSelect} sx={{ width: '100%',  display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }} />
+          <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} sx={{ width: '100%',  display: 'flex', flexDirection: 'column' }} />
         </Grid>
       ))}
     </Grid>

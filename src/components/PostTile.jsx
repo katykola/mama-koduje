@@ -1,13 +1,9 @@
-import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Link, Stack } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
-export default function PostTile( { id, date, title, imgSrc, perex} ) {
+export default function PostTile( { date, title, urlTitle, imgSrc, perex} ) {
 
-  const navigate = useNavigate();
-
-  // Convert the date string to a Date object if it's not already a Date object
   let dateObject = typeof date === 'string' ? new Date(date) : date;
-  // Check if dateObject is a valid Date object
   if (!(dateObject instanceof Date) || isNaN(dateObject)) {
     dateObject = new Date();
   }
@@ -17,10 +13,6 @@ export default function PostTile( { id, date, title, imgSrc, perex} ) {
     month: '2-digit',
     year: 'numeric',
   });
-
-  const handlePostSelect = () => {
-    navigate(`/post/${urlTitle}`);
-  };
 
     return(
         <>
@@ -50,7 +42,9 @@ export default function PostTile( { id, date, title, imgSrc, perex} ) {
 
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
                 <Typography variant='tileTextSm' sx={{ marginBottom: '0.5rem' }}>{formattedDate}</Typography>
-                <Typography variant="tileTitle"><Link onClick={handlePostSelect}>{title}</Link></Typography>
+                <Link component={RouterLink} to={`/post/${urlTitle}`}>
+                   <Typography variant="tileTitle">{title}</Typography>
+                </Link>
                 <Typography variant='tileText' sx={{overflow: 'hidden'}}>{perex}</Typography>
             </Box>
 

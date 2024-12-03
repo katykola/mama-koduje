@@ -24,7 +24,6 @@ export default function AppRouter() {
   const { currentUser } = useAuth();
 
   const [posts, setPosts] = useState([]);
-  const [selectedPostId, setSelectedPostId] = useState(null);
 
   async function getPosts() {
     try {
@@ -43,10 +42,6 @@ export default function AppRouter() {
     getPosts();
   }, []);
 
-  const handlePostSelect = () => {
-    navigate(`/post/${urlTitle}`);
-  };
-
   return (
     <>
       <Box
@@ -62,12 +57,12 @@ export default function AppRouter() {
         <Routes>
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/admin/*" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-          <Route path="/" element={<Wrapper sx={{ flex: 1 }}><HomePage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
-          <Route path="/recenze" element={<Wrapper sx={{ flex: 1 }}><ReviewPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
-          <Route path="/ze-zivota" element={<Wrapper sx={{ flex: 1 }}><PostPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
+          <Route path="/" element={<Wrapper sx={{ flex: 1 }}><HomePage posts={posts}/></Wrapper>} />
+          <Route path="/recenze" element={<Wrapper sx={{ flex: 1 }}><ReviewPage posts={posts}  /></Wrapper>} />
+          <Route path="/ze-zivota" element={<Wrapper sx={{ flex: 1 }}><PostPage posts={posts} /></Wrapper>} />
           <Route path="/o-me" element={<Wrapper sx={{ flex: 1 }}><AboutPage /></Wrapper>} />
-          <Route path="/post/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><PostDetailPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
-          <Route path="/recenze/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><ReviewDetailPage posts={posts} handlePostSelect={handlePostSelect} /></Wrapper>} />
+          <Route path="/post/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><PostDetailPage posts={posts} /></Wrapper>} />
+          <Route path="/recenze/:urlTitle" element={<Wrapper sx={{ flex: 1 }}><ReviewDetailPage posts={posts} /></Wrapper>} />
         </Routes>
         <Footer />
       </Box>
