@@ -3,6 +3,7 @@ import { Stack, Grid, Box, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MainImage from '../components/MainImage';
 import PostTile from '../components/PostTile';
+import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
 
 export default function PostDetailPage({ posts }) {
 
@@ -30,7 +31,9 @@ export default function PostDetailPage({ posts }) {
           <Typography variant="h1">{post.title}</Typography>
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
           <MainImage imgSrc="/littlehand_desktop.jpg" />
-          <Typography variant='body1'>{post.content}</Typography>
+          <div className="ql-snow">
+             <div className="ql-editor" dangerouslySetInnerHTML={{ __html: post.content }} />
+          </div>
         </Stack>
 
         <Box>

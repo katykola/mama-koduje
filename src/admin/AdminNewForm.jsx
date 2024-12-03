@@ -1,11 +1,12 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { Box, Button, TextField, Stack, Typography, FormControl } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Rating } from '@mui/material';
 import AdminArrayField from './AdminArrayField';
-
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
 
 export default function AdminNewForm({
   title,
@@ -17,6 +18,34 @@ export default function AdminNewForm({
   existingTags, // Add existingTags prop
 }) 
 {
+
+  const quillRef = useRef(null);
+  const quillInstance = useRef(null);
+
+  useEffect(() => {
+    if (quillRef.current && !quillInstance.current) {
+      quillInstance.current = new Quill(quillRef.current, {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ 'header': '2'}, { 'header': '3'}, { 'font': ['Inria Sans', sans-serif] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['bold', 'italic', 'underline'],
+            ['link'],
+            [{ 'align': [] }],
+            [{ 'color': [] }, { 'background': [] }],
+            ['clean']
+          ]
+        }
+      });
+
+      quillInstance.current.on('text-change', () => {
+        const content = quillInstance.current.root.innerHTML;
+        onChange('content', content);
+      });
+    }
+  }, [onChange]);
+
   
   return (
     <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
@@ -53,6 +82,16 @@ export default function AdminNewForm({
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                 />
+              ) : field.name === 'content' ? (
+                <FormControl fullWidth>
+                  <Typography variant="body1" sx={{ mb: 1 }}>{field.label}</Typography>
+                  <div ref={quillRef} style={{ height: '200px', backgroundColor: 'white' }} />
+                  {errors[field.name] && (
+                    <Typography variant="caption" color="error">
+                      {errors[field.name]}
+                    </Typography>
+                  )}
+                </FormControl>
               ) : field.type === 'number' ? (
                 <TextField
                   required={field.required}
