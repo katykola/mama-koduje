@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { Stack, Box, Grid, Link, Typography, Rating, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { Stack, Box, Grid, Link, Typography, Rating } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import CircleIcon from '@mui/icons-material/Circle'; 
 import ReviewTile from '../components/ReviewTile';
+import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
 
 export default function ReviewDetailPage({posts}) {
 
@@ -13,13 +14,23 @@ export default function ReviewDetailPage({posts}) {
     if (!review) {
         return <Typography>Recenze nenalezena</Typography>;
       }
-
-    const dateObject = review.date && review.date.toDate ? review.date.toDate() : new Date();
-    const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
+    
+      let dateObject;
+      if (review.date instanceof Date) {
+        dateObject = review.date;
+      } else if (review.date && typeof review.date.toDate === 'function') {
+        dateObject = review.date.toDate();
+      } else if (typeof review.date === 'string') {
+        dateObject = new Date(review.date);
+      } else {
+        dateObject = new Date();
+      }
+    
+      const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
-    });
+      });
     
       return (
             <>
@@ -44,14 +55,16 @@ export default function ReviewDetailPage({posts}) {
           <Typography variant="h1">{review.title}</Typography>
           <Typography variant="body1">{review.author}</Typography>
           <Typography variant="body1" sx={{fontWeight: 600}}>{review.perex}</Typography>
-          <Typography variant='body1'>{review.content}</Typography>
+          <Box className="ql-snow">
+             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: review.content }} />
+          </Box>
         <Grid container>
           <Grid item xs={12} sm={6} >
             <Box sx={{border: '1px solid var(--border-color)', p: 3}}>
               <Typography variant='body1' sx={{fontWeight: 600, mb: 1}}>Plusy</Typography>
                   <Box sx={{pl: 1}}>
-                    {review.positives.map((positive) => (
-                      <Typography sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{positive}</Typography>
+                    {review.positives.map((positive, i) => (
+                      <Typography key={i} sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{positive}</Typography>
                     ))}
                   </Box>
             </Box>
@@ -60,8 +73,8 @@ export default function ReviewDetailPage({posts}) {
             <Box sx={{border: '1px solid var(--border-color)', p: 3}}>
               <Typography variant='body1' sx={{fontWeight: 600, mb: 1}}>Mínusy</Typography>
                   <Box sx={{pl: 1}}>
-                    {review.negatives.map((negative) => (
-                      <Typography sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{negative}</Typography>
+                    {review.negatives.map((negative, i) => (
+                      <Typography key={i} sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{negative}</Typography>
                     ))}
                   </Box>
             </Box>

@@ -15,7 +15,17 @@ export default function PostDetailPage({ posts }) {
     return <Typography>Článek nenalezen</Typography>;
   }
 
-  const dateObject = post.date && post.date.toDate ? post.date.toDate() : new Date();
+  let dateObject;
+  if (post.date instanceof Date) {
+    dateObject = post.date;
+  } else if (post.date && typeof post.date.toDate === 'function') {
+    dateObject = post.date.toDate();
+  } else if (typeof post.date === 'string') {
+    dateObject = new Date(post.date);
+  } else {
+    dateObject = new Date();
+  }
+
   const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
     day: '2-digit',
     month: '2-digit',
@@ -31,9 +41,9 @@ export default function PostDetailPage({ posts }) {
           <Typography variant="h1">{post.title}</Typography>
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
           <MainImage imgSrc="/littlehand_desktop.jpg" />
-          <div className="ql-snow">
-             <div className="ql-editor" dangerouslySetInnerHTML={{ __html: post.content }} />
-          </div>
+          <Box className="ql-snow">
+             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+          </Box>
         </Stack>
 
         <Box>

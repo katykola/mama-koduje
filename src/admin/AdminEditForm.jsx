@@ -6,6 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Rating } from '@mui/material';
 import AdminArrayField from './AdminArrayField';
 import { getFields } from '../config/formFields'; // Import getFields function
+import QuillEditor from './QuillEditor';
 
 export default function AdminEditForm({
   values,
@@ -55,6 +56,15 @@ export default function AdminEditForm({
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                 />
+              ) : field.name === 'content' ? (
+                  <QuillEditor 
+                  required={field.required}
+                  label={field.label}
+                  value={field.value} 
+                  name={field.name}
+                  onChange={onChange} 
+                  errors={errors}
+                  />
               ) : field.type === 'number' ? (
                 <TextField
                   required={field.required}
