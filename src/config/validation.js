@@ -6,6 +6,7 @@ export const validateFields = (values, isPost = false, isLifeXP = false) => {
     if (!values.date) newErrors.date = 'Datum je povinné';
     if (!values.perex) newErrors.perex = 'Perex je povinné';
     if (!values.content) newErrors.content = 'Obsah je povinné';
+    if (!values.image) newErrors.image = 'Obrázek je povinný';
   } else if (isLifeXP){
     if (!values.order) newErrors.order = 'Pořadí je povinné';
     if (!values.date) newErrors.date = 'Měsíc Rok je povinné';

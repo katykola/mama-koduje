@@ -1,4 +1,4 @@
-import { Button, Stack, Typography, Link, Grid } from '@mui/material';
+import { Box, Button, Stack, Typography, Link, Grid } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MainImage from '../components/MainImage';
 import ReviewTile from '../components/ReviewTile';
@@ -6,7 +6,7 @@ import PostTile from '../components/PostTile';
 import Icons from '../components/Icons';
 
 
-export default function HomePage({posts, handlePostSelect}) {
+export default function HomePage({posts}) {
 
     const postsWithAuthor = posts.filter(post => post.author);
     const postsWithoutAuthor = posts.filter(post => !post.author);
@@ -47,7 +47,7 @@ export default function HomePage({posts, handlePostSelect}) {
                 <Stack spacing={4}>
                     <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
                     {postsWithoutAuthor.slice(0, 3).map((post) => (
-                    <PostTile key={post.id} imgSrc='../littlehand_desktop.jpg' id={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
+                    <PostTile key={post.id} imgSrc={post.image} id={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
                     ))}
                 </Stack>
             </Grid>
@@ -72,7 +72,9 @@ export default function HomePage({posts, handlePostSelect}) {
             </Stack>
             <Stack spacing={2} sx={{ mt: 6, marginLeft:'6rem' }}>
                 <Typography variant='sectionTitle'>Sleduj mě</Typography>
-                <Icons/>
+                <Box sx={{borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)'}}>
+                  <Icons/>
+                </Box>
             </Stack>
             </Grid>
              

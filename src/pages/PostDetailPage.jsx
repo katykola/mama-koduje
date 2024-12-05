@@ -40,7 +40,7 @@ export default function PostDetailPage({ posts }) {
           <Typography>{formattedDate}</Typography>
           <Typography variant="h1">{post.title}</Typography>
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
-          <MainImage imgSrc="/littlehand_desktop.jpg" />
+          <MainImage imgSrc={post.image} />
           <Box className="ql-snow">
              <Box className="ql-content" dangerouslySetInnerHTML={{ __html: post.content }} />
           </Box>

@@ -1,4 +1,5 @@
-import { Box, Button, TextField, Stack, Typography, FormControl } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, TextField, Stack, FormControl, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -13,10 +14,17 @@ export default function AdminNewForm({
   onChange,
   onSubmit,
   onCancel,
-  existingTags, 
-}) 
-{
+  existingTags,
+}) {
   
+  const [newImage, setNewImage] = useState(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setNewImage(file);
+    onChange('image', file);
+  };
+
   return (
     <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
       <Stack spacing={5}>
@@ -46,27 +54,41 @@ export default function AdminNewForm({
                   label={field.label}
                   values={field.value}
                   onChange={(newValue) => onChange(field.name, newValue)}
-                  existingItems={existingTags} // Pass existingTags to ArrayField
-                  isTagsField={field.name === 'tags'} // Pass isTagsField prop
+                  existingItems={existingTags}
+                  isTagsField={field.name === 'tags'}
                   required={field.required}
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                 />
               ) : field.name === 'content' ? (
-                <QuillEditor 
-                label={field.label}
-                value={field.value} 
-                name={field.name}
-                onChange={onChange} 
-                errors={errors}
+                <QuillEditor
+                  required={field.required}
+                  label={field.label}
+                  value={field.value}
+                  name={field.name}
+                  onChange={onChange}
+                  errors={errors}
                 />
+              ) : field.name === 'image' ? (
+                  <TextField
+                    type="file"
+                    label={field.label}
+                    name={field.name}
+                    onChange={handleImageUpload}
+                    error={!!errors[field.name]}
+                    helperText={errors[field.name]}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ backgroundColor: 'white', borderRadius: '5px' }}
+                  />
               ) : field.type === 'number' ? (
                 <TextField
                   required={field.required}
                   label={field.label}
                   id={field.name}
                   value={field.value}
-                  onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
+                  onChange={(e) => onChange(field.name, Number(e.target.value))}
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                   type="number"
@@ -78,8 +100,8 @@ export default function AdminNewForm({
                   <Rating
                     name={field.name}
                     value={field.value}
-                    onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
-                    />
+                    onChange={(e) => onChange(field.name, Number(e.target.value))}
+                  />
                   {errors[field.name] && (
                     <Typography variant="caption" color="error">
                       {errors[field.name]}
@@ -104,9 +126,9 @@ export default function AdminNewForm({
           ))}
         </Stack>
         <Stack direction='row' spacing={2} sx={{ justifyContent: 'end' }}>
-          <Button onClick={onCancel} variant='outlined'>Zpět</Button>
+          <Button onClick={onCancel} variant='outlined'>Cancel</Button>
           <Button onClick={onSubmit} variant="contained">
-            Uložit
+            Save
           </Button>
         </Stack>
       </Stack>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Stack, Button, Typography, FormControl, TextField } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 import AdminEditForm from './AdminEditForm';
+import { getFields } from '../config/formFields'; // Import getFields function
 
 export default function AdminReviewTile({ id, tags, title, author, date, rating, perex, content, positives, negatives, link, deletePost, updatePost }) {
-  // Convert the date string to a Date object if it's not already a Date object
+
   let dateObject = typeof date === 'string' ? new Date(date) : date;
-  // Check if dateObject is a valid Date object
   if (!(dateObject instanceof Date) || isNaN(dateObject)) {
     dateObject = new Date();
   }
@@ -38,18 +38,20 @@ export default function AdminReviewTile({ id, tags, title, author, date, rating,
     setIsEditing(false);
   };
 
-  const fields = [
-    { name: 'tags', label: 'Štítky', value: editedTags },
-    { name: 'title', label: 'Titulek', value: editedTitle },
-    { name: 'author', label: 'Autor', value: editedAuthor },
-    { name: 'date', label: 'Datum', value: editedDate, type: 'date' },
-    { name: 'rating', label: 'Hodnocení', value: editedRating, type: 'number' },
-    { name: 'perex', label: 'Perex', value: editedPerex },
-    { name: 'content', label: 'Obsah článku', value: editedContent, multiline: true, minRows: 4 },
-    { name: 'positives', label: 'Pozitiva', value: editedPositives },
-    { name: 'negatives', label: 'Negativa', value: editedNegatives },
-    { name: 'link', label: 'Odkaz', value: editedLink },
-  ];
+  const values = {
+    tags: editedTags,
+    title: editedTitle,
+    author: editedAuthor,
+    date: editedDate,
+    rating: editedRating,
+    perex: editedPerex,
+    content: editedContent,
+    positives: editedPositives,
+    negatives: editedNegatives,
+    link: editedLink,
+  };
+
+  const fields = getFields(values, false, false); // Use getFields to generate the fields array
 
   return (
     <>

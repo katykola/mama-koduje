@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import { Container, Stack, Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import Icons from './Icons';
 
 const menuItems = [
   { text: 'Home', path: '/' },
   { text: 'Recenze', path: '/recenze' },
   { text: 'Ze života', path: '/ze-zivota' },
   { text: 'O mě', path: '/o-me' },
-  { text: 'Kontakt', path: '/kontakt' },
-  { text: 'Dark Mode' },
 ];
 
 export default function Header() {
@@ -61,18 +60,24 @@ export default function Header() {
                     <ListItemText primary={item.text} />
                   </ListItem>
                 ))}
+                <Icons/>
               </List>            
             </Drawer>
           </>
         ) : (
           <>
-            {menuItems.map((item, index) => (
-                <Typography key={index} variant="navItem" sx={{ height: '100%', paddingLeft: '1rem', paddingRight: '1rem' }}>
-                  <Link to={item.path} style={{ color: 'inherit', textDecoration: 'none' }}>
-                    {item.text}
-                  </Link>
-                </Typography>
-            ))}
+            <Container maxWidth="md">
+              <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}}>
+                {menuItems.map((item, index) => (
+                    <Typography key={index} variant="navItem" sx={{ height: '100%', paddingLeft: '1rem', paddingRight: '1rem' }}>
+                      <Link to={item.path} style={{ color: 'inherit', textDecoration: 'none' }}>
+                        {item.text}
+                      </Link>
+                    </Typography>
+                ))}
+                <Icons/>
+              </Stack>
+            </Container>
           </>
         )}
       </Toolbar>

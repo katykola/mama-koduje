@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button } from '@mui/material';
 import { db } from '../config/firebase';
-import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import AdminPostTile from './AdminPostTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
-
+import { uploadImageToCloudinary } from '../config/cloudinaryUpload';
 
 export default function AdminPostsPage() {
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [newTitle, setnewTitle] = useState('');
-  const [newDate, setnewDate] = useState(new Date());
-  const [newPerex, setnewPerex] = useState('');
-  const [newContent, setnewContent] = useState('');
+  const [newTitle, setNewTitle] = useState('');
+  const [newDate, setNewDate] = useState(new Date());
+  const [newPerex, setNewPerex] = useState('');
+  const [newContent, setNewContent] = useState('');
   const [urlTitle, setUrlTitle] = useState('');
+  const [newImage, setNewImage] = useState(null);
   const [errors, setErrors] = useState({});
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
+  const [editValues, setEditValues] = useState(null);
 
   async function getPosts() {
     try {
@@ -60,6 +61,7 @@ export default function AdminPostsPage() {
     if (!newDate) newErrors.date = 'Datum je povinné';
     if (!newPerex) newErrors.perex = 'Perex je povinné';
     if (!newContent) newErrors.content = 'Obsah je povinné';
+    if (!newImage) newErrors.image = 'Obrázek je povinný';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -71,19 +73,26 @@ export default function AdminPostsPage() {
     setUrlTitle(generatedUrlTitle);
 
     try {
+      let imageUrl = '';
+      if (newImage) {
+        imageUrl = await uploadImageToCloudinary(newImage);
+      }
+
       await addDoc(collection(db, 'posts'), {
         title: newTitle,
         date: newDate ? newDate.toISOString() : null,
         perex: newPerex,
         content: newContent,
         urlTitle: generatedUrlTitle,
+        image: imageUrl,
       });
       getPosts();
-      setnewTitle('');
-      setnewDate(new Date());
-      setnewPerex('');
-      setnewContent('');
+      setNewTitle('');
+      setNewDate(new Date());
+      setNewPerex('');
+      setNewContent('');
       setUrlTitle('');
+      setNewImage(null);
       toggleCreateNew();
     } catch (err) {
       console.log(err);
@@ -103,13 +112,14 @@ export default function AdminPostsPage() {
     }
   }
 
-  async function updatePost(id, date, title, perex, content) {
+  async function updatePost(id, date, title, perex, content, image) {
     try {
       await updateDoc(doc(db, 'posts', id), {
         date,
         title,
         perex,
         content,
+        image
       });
       getPosts();
     } catch (err) {
@@ -131,26 +141,35 @@ export default function AdminPostsPage() {
     setDocToDelete(null);
   }
 
+  const handleEdit = (post) => {
+    setEditValues(post);
+    setIsHiddenCreateNew(false);
+  };
+
   const fields = [
     { name: 'title', label: 'Titulek', value: newTitle, required: true },
     { name: 'date', label: 'Datum', value: newDate, required: true, type: 'date' },
     { name: 'perex', label: 'Perex', value: newPerex, required: true },
     { name: 'content', label: 'Obsah článku', value: newContent, required: true, multiline: true, minRows: 4 },
+    { name: 'image', label: 'Obrázek', value: '', required: true, type: 'file' },
   ];
 
   const handleFieldChange = (name, value) => {
     switch (name) {
       case 'title':
-        setnewTitle(value);
+        setNewTitle(value);
         break;
       case 'date':
-        setnewDate(value);
+        setNewDate(value);
         break;
       case 'perex':
-        setnewPerex(value);
+        setNewPerex(value);
         break;
       case 'content':
-        setnewContent(value);
+        setNewContent(value);
+        break;
+      case 'image':
+        setNewImage(value);
         break;
       default:
         break;
@@ -184,6 +203,7 @@ export default function AdminPostsPage() {
             date={post.date}
             perex={post.perex}
             content={post.content}
+            image={post.image}
             updatePost={updatePost}
             deletePost={() => openDialog(post.id)}
           />

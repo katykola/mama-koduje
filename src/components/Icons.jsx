@@ -5,14 +5,32 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 
 export default function Icons() {
     return(
-        <Stack direction='row' spacing={2} sx={{ justifyContent: 'center',  borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-        <IconButton aria-label="instagram">
+        <Stack direction='row' spacing={2} sx={{ justifyContent: 'center' }}>
+        <IconButton 
+            aria-label="instagram"
+            component="a"
+            href="https://www.instagram.com/katy.koduje/"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <InstagramIcon />
         </IconButton>
-        <IconButton aria-label="linkedIn">
+        <IconButton 
+            aria-label="linkedIn"
+            component="a"
+            href="https://www.linkedin.com/in/katerinakolar/"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <LinkedInIcon />
         </IconButton>
-        <IconButton aria-label="github">
+        <IconButton 
+            aria-label="github"
+            component="a"
+            href="https://github.com/katykola"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <GitHubIcon />
         </IconButton>
     </Stack>

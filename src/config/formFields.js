@@ -12,9 +12,10 @@ const allFields = {
   order: { name: 'order', label: 'Pořadí', required: true },
   subtitle: { name: 'subtitle', label: 'Podnázev', required: true },
   text: { name: 'text', label: 'Text', required: true, multiline: true, minRows: 4 },
+  image: { name: 'image', label: 'Obrázek', type: 'string', required: true },
 };
 
-const postFields = ['title', 'date', 'perex', 'content'];
+const postFields = ['title', 'date', 'perex', 'content', 'image'];
 
 const lifeXPFields = ['order', 'title', 'subtitle', 'date', 'text'];
 

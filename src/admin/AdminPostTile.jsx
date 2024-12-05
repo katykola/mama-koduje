@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { Stack, Button, Typography } from '@mui/material';
+import { Stack, Button, Typography, TextField, Box } from '@mui/material';
+import { uploadImageToCloudinary } from '../config/cloudinaryUpload'; // Import the Cloudinary upload function
+import { validateFields } from '../config/validation'; // Import the validateFields function
+import { getFields } from '../config/formFields';
 import AdminEditForm from './AdminEditForm';
-import { validateFields } from '../config/validation'; // Import validateFields function
 
-export default function AdminPostTile({ id, title, date, perex, content, deletePost, updatePost }) {
-  
-  // Convert the date string to a Date object if it's not already a Date object
-  let dateObject = typeof date === 'string' ? new Date(date) : date;
-  // Check if dateObject is a valid Date object
-  if (!(dateObject instanceof Date) || isNaN(dateObject)) {
-    dateObject = new Date();
-  }
+export default function AdminPostTile({
+  id,
+  title,
+  date,
+  perex,
+  content,
+  image,
+  updatePost,
+  deletePost
+}) {
 
+  const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
     day: '2-digit',
     month: '2-digit',
@@ -24,8 +29,8 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
   const [editedDate, setEditedDate] = useState(dateObject);
   const [editedPerex, setEditedPerex] = useState(perex);
   const [editedContent, setEditedContent] = useState(content);
+  const [editedImage, setEditedImage] = useState(image);
   const [errors, setErrors] = useState({}); 
-
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
@@ -37,12 +42,23 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
       date: editedDate,
       perex: editedPerex,
       content: editedContent,
+      image: editedImage,
     }, true, false);
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    updatePost(id, editedDate.toISOString(), editedTitle, editedPerex, editedContent);
+    updatePost(id, editedDate.toISOString(), editedTitle, editedPerex, editedContent, editedImage);
     setIsEditing(false);
   };
+
+  const values = {
+    title: editedTitle,
+    date: editedDate,
+    perex: editedPerex,
+    content: editedContent,
+    image: editedImage,
+  };
+
+  const fields = getFields(values, true, false); // Use getFields to generate the fields array
 
   return (
     <>
@@ -58,20 +74,15 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
         </Stack>
       ) : (
         <AdminEditForm
-        values={{
-          title: editedTitle,
-          date: editedDate,
-          perex: editedPerex,
-          content: editedContent,
-         }}
-          isPost = {true}
+          values={values}
+          fields={fields}
+          isPost={true}
           errors={errors}
-
           onChange={(name, value) => {
             switch (name) {
               case 'title':
                 setEditedTitle(value);
-                break;
+                break;       
               case 'date':
                 setEditedDate(value);
                 break;
@@ -81,6 +92,9 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
               case 'content':
                 setEditedContent(value);
                 break;
+              case 'image':
+                setEditedImage(value);
+                break;
               default:
                 break;
             }
@@ -88,6 +102,7 @@ export default function AdminPostTile({ id, title, date, perex, content, deleteP
           onSave={handleSave}
           onCancel={toggleEdit}
         />
+        
       )}
     </>
   );

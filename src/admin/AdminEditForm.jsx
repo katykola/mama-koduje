@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Button, TextField, Stack, Typography, FormControl } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Button, TextField, Stack, FormControl, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -19,7 +19,31 @@ export default function AdminEditForm({
   isLifeXP
 }) {
 
+  const [image, setImage] = useState(values.image || null); // Initialize image state with current image
+  const [newImage, setNewImage] = useState(null); // State for new image upload
+  const [content, setContet] = useState(values.content || ''); // Initialize content state with current content 
+
   const fields = getFields(values, isPost, isLifeXP); // Generate fields array using getFields function
+
+  useEffect(() => {
+    console.log('Initial values:', values);
+    console.log('Initial content:', content);
+  }, [values, content]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    console.log('Uploading new image:', file);
+    setNewImage(file);
+
+    try {
+      const imageUrl = await uploadImageToCloudinary(file);
+      console.log('Uploaded image URL:', imageUrl);
+      setImage(imageUrl);
+      onChange('image', imageUrl); // Update the parent component state with the new image URL
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
 
   return (
     <Box sx={{ border: '1px solid var(--secondary-color)', p: 3, mb: 4, backgroundColor: '#f7e6e6' }}>
@@ -32,7 +56,10 @@ export default function AdminEditForm({
                   <DatePicker
                     label={field.label}
                     value={field.value}
-                    onChange={(newValue) => onChange(field.name, newValue)}
+                    onChange={(newValue) => {
+                      console.log(`Date changed for ${field.name}:`, newValue);
+                      onChange(field.name, newValue);
+                    }}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -48,30 +75,58 @@ export default function AdminEditForm({
                 <AdminArrayField
                   label={field.label}
                   values={field.value}
-                  onChange={(newValue) => onChange(field.name, newValue)}
-                  existingItems={existingTags} // Pass existingTags to ArrayField
-                  isTagsField={field.name === 'tags'} // Pass isTagsField prop
-                  isPost = {isPost}
+                  onChange={(newValue) => {
+                    console.log(`Array field changed for ${field.name}:`, newValue);
+                    onChange(field.name, newValue);
+                  }}
+                  existingItems={existingTags}
+                  isTagsField={field.name === 'tags'}
                   required={field.required}
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                 />
               ) : field.name === 'content' ? (
-                  <QuillEditor 
+                <QuillEditor
                   required={field.required}
                   label={field.label}
-                  value={field.value} 
+                  value={field.value}
                   name={field.name}
-                  onChange={onChange} 
+                  onChange={(name, newValue) => {
+                    console.log(`Content changed for ${name}:`, newValue);
+                    onChange(name, newValue);
+                  }}
                   errors={errors}
+                />
+              ) : field.name === 'image' ? (
+                <Box>
+                  {image && (
+                    <Box sx={{ mb: 2 }}>
+                      <img src={image} alt="Current" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                    </Box>
+                  )}
+                  <TextField
+                    type="file"
+                    label={field.label}
+                    name={field.name}
+                    onChange={handleImageUpload}
+                    error={!!errors[field.name]}
+                    helperText={errors[field.name]}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    sx={{ backgroundColor: 'white', borderRadius: '5px' }}
                   />
+                </Box>
               ) : field.type === 'number' ? (
                 <TextField
                   required={field.required}
                   label={field.label}
                   id={field.name}
                   value={field.value}
-                  onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
+                  onChange={(e) => {
+                    console.log(`Number field changed for ${field.name}:`, e.target.value);
+                    onChange(field.name, Number(e.target.value));
+                  }}
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                   type="number"
@@ -83,7 +138,10 @@ export default function AdminEditForm({
                   <Rating
                     name={field.name}
                     value={field.value}
-                    onChange={(e) => onChange(field.name, Number(e.target.value))} // Convert to number
+                    onChange={(e) => {
+                      console.log(`Rating changed for ${field.name}:`, e.target.value);
+                      onChange(field.name, Number(e.target.value));
+                    }}
                   />
                   {errors[field.name] && (
                     <Typography variant="caption" color="error">
@@ -97,7 +155,10 @@ export default function AdminEditForm({
                   label={field.label}
                   id={field.name}
                   value={field.value}
-                  onChange={(e) => onChange(field.name, e.target.value)}
+                  onChange={(e) => {
+                    console.log(`Field changed for ${field.name}:`, e.target.value);
+                    onChange(field.name, e.target.value);
+                  }}
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                   multiline={field.multiline}
@@ -109,9 +170,9 @@ export default function AdminEditForm({
           ))}
         </Stack>
         <Stack direction='row' spacing={2} sx={{ justifyContent: 'end' }}>
-          <Button onClick={onCancel} variant='outlined'>Zpět</Button>
+          <Button onClick={onCancel} variant='outlined'>Cancel</Button>
           <Button onClick={onSave} variant="contained">
-            Uložit
+            Save
           </Button>
         </Stack>
       </Stack>
