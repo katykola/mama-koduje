@@ -4,12 +4,15 @@ import MainImage from '../components/MainImage';
 import ReviewTile from '../components/ReviewTile';
 import PostTile from '../components/PostTile';
 import Icons from '../components/Icons';
-
+import katyVeSlunci from '../assets/images/katy-ve-slunci300.jpg'; 
+import { useMediaQuery } from '@mui/material';
+import theme from '../styles/theme';
 
 export default function HomePage({posts}) {
 
     const postsWithAuthor = posts.filter(post => post.author);
     const postsWithoutAuthor = posts.filter(post => !post.author);
+    const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <>        
@@ -17,11 +20,11 @@ export default function HomePage({posts}) {
 
         <MainImage imgSrc="/littlehand_desktop.jpg"/>
 
-        <Stack spacing={4}>
+        <Stack spacing={2}>
           <Typography variant="sectionTitle">RECENZE KURZŮ, BOOTCAMPŮ A KNIH </Typography>
-          <Grid container>
+          <Grid container spacing={2} sx={{position: 'relative', right: '1rem'}}>
             {postsWithAuthor.slice(0, 3).map((post, index) => (
-              <Grid item xs={12} sm={4} key={post.id} sx={{ display: 'flex', paddingRight: index >= 2 ? 0 : 2}}>
+              <Grid item xs={12} sm={4} key={post.id} sx={{ display: 'flex'}}>
                 <ReviewTile
                   key={post.id}
                   id={post.id}
@@ -44,34 +47,46 @@ export default function HomePage({posts}) {
         <Grid container>
 
             <Grid item xs={12} md={6}>
-                <Stack spacing={4}>
+                <Stack spacing={2}>
                     <Typography variant='sectionTitle'>POSTŘEHY ZE ŽIVOTA</Typography>
-                    {postsWithoutAuthor.slice(0, 3).map((post) => (
+                    {postsWithoutAuthor.slice(0, 4).map((post) => (
                     <PostTile key={post.id} imgSrc={post.image} id={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
                     ))}
                 </Stack>
             </Grid>
 
             <Grid item xs={12} md={6} >
-            <Stack spacing={4} sx={{ marginLeft:'6rem' }}>
-                <Typography variant='sectionTitle'>O mě</Typography>
-                <MainImage imgSrc="/littlehand_desktop.jpg"/>
-                <Typography variant='body1'>
-                Jsem matka malé Emy, která se rozhodla, že rodičovskou využiju k tomu, že se naučí kódovat.
+            <Stack spacing={2} sx={{ marginLeft: { xs: 0, md: '6rem' } }}>
+                <Typography variant='sectionTitle' sx={{ paddingTop: {xs: '2rem', md: 0}}}>O mě</Typography>
+                {!isTablet &&
+                <Box
+                  component="img"
+                  sx={{
+                      width: '100%',
+                      aspectRatio: '1/1',
+                      objectFit: 'cover', 
+                      objectPosition: 'center', 
+                  }}
+                  alt="placeholder"
+                  src={katyVeSlunci}
+              />                
+                }
+              <Typography variant='body1'>
+                Ahoj, jsem Katy. Máma, milovnice pletení, háčkování, cestování na blízko a programování.
                 </Typography>
                 <Typography variant='body1'>
-                Začala jsem prvním kurzem a zjistila, že už není cesty zpět a že mě kódování baví neskutečně víc, než moje předchozí povolání. Dělat si rekvalifikaci a zároveň se starat o dítko není vůbec jednoduché, ale já pevně věřím, že na konci tohohle bootcampu vylezu jako šikovný IT odborník.
+                Tohle je můj projekt, který jsem začala v den, kdy moje cesta začala. Nejdřív jsem svoje výhry a prohry sdílela jen na Instagramu a později jsem v rámci kurzu u Czechitas vytvořila první verzi tohoto blogu. 
                 </Typography>
                 <Typography variant='body1'>
-                Chtěla bych zde vytvořit místo, kde se programátorky s dětmi nebudou bát sdílet své reálné zkušenosti. Ty dobré, i ty těžké.
+                Máma kóduje pro mě byla v prvních měsících mateřství kotva, která mě držela pohromadě, když jsem měla pocit, že se v té nové existenci mámy začínám rozpouštět. Je to projekt blízký mému srdci i proto, že je plný vzpomínek na mou malou holčičku.
                 </Typography>
                 <Typography variant='body1'>
-                Věřím, že nikdy není pozdě začít a podle tohoto hesla se řídím celý život. Stačí jen překonat počáteční strach.
+                Najdete tu recenze na kurzy, které jsem absolvovala, ale taky nějaké ty poznatky z mého nejen mateřského života.
                 </Typography>
                 <Typography variant='body1' sx={{ textAlign: 'right' }}><Link component={RouterLink} to='/o-me'>Více o mě</Link></Typography>
             </Stack>
-            <Stack spacing={2} sx={{ mt: 6, marginLeft:'6rem' }}>
-                <Typography variant='sectionTitle'>Sleduj mě</Typography>
+            <Stack spacing={2}  sx={{ marginLeft: { xs: 0, md: '6rem' } }}>
+                <Typography variant='sectionTitle' sx={{ paddingTop: {xs: '2rem', md: 0}}}>Sleduj mě</Typography>
                 <Box sx={{borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)'}}>
                   <Icons/>
                 </Box>

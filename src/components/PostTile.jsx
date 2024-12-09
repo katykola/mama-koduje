@@ -1,55 +1,79 @@
-import { Box, Typography, Link, Stack } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
+import { Stack, Box, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-export default function PostTile( { date, title, urlTitle, imgSrc, perex} ) {
+const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) => {
+    const stackRef = useRef(null); // Reference to the Stack component
+    const [isNarrow, setIsNarrow] = useState(false);
 
-  let dateObject = typeof date === 'string' ? new Date(date) : date;
-  if (!(dateObject instanceof Date) || isNaN(dateObject)) {
-    dateObject = new Date();
-  }
+    useEffect(() => {
+        // Function to check the width of the Stack
+        const updateWidth = () => {
+            if (stackRef.current) {
+                setIsNarrow(stackRef.current.offsetWidth < 400);
+            }
+        };
 
-  const formattedDate = dateObject.toLocaleDateString('cs-CZ', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+        // Update on mount and resize
+        updateWidth();
+        window.addEventListener('resize', updateWidth);
 
-    return(
-        <>
+        return () => {
+            window.removeEventListener('resize', updateWidth);
+        };
+    }, []);
 
-        <Stack direction='row' sx={{ }}>
-          
-            <Box
+    return (
+        <Stack
+            ref={stackRef}
+            direction={isNarrow ? 'column' : 'row'} // Conditional direction based on width
             sx={{
-              width: '100%', 
-              minWidth: '200px',
-              p: 0, 
-              overflow: 'hidden', 
-            }}
-             >
-            <Box 
-              component="img"
-              sx={{
                 width: '100%',
-                height: '100%',
-                objectFit: 'cover', // Maintain aspect ratio and cover the area
-                objectPosition: 'top', // Align the top part of the image with the top of the container
-              }}
-              alt="placeholder"
-              src={imgSrc}
-            />
+                border: '1px solid var(--border-color)',
+                backgroundColor: '#FFEDED',
+            }}
+        >
+            <Box
+                sx={{
+                    width: isNarrow ? '100%' : '200px',
+                    overflow: 'hidden',
+                }}
+            >
+                <Box
+                    component="img"
+                    sx={{
+                        width: '100%',
+                        height: '100%',
+                        aspectRatio: '16 / 9',
+                        objectFit: 'cover',
+                        objectPosition: 'top',
+                    }}
+                    alt="placeholder"
+                    src={imgSrc}
+                />
             </Box>
-
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
-                <Typography variant='tileTextSm' sx={{ marginBottom: '0.5rem' }}>{formattedDate}</Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: isNarrow ? 'center' : 'flex-start',
+                    justifyContent: 'center',
+                    padding: '2rem',
+                    width: isNarrow ? '100%' : 'calc(100% - 200px)',
+                }}
+            >
+                <Typography variant="tileTextSm" sx={{ marginBottom: '0.5rem' }}>
+                    {formattedDate}
+                </Typography>
                 <Link component={RouterLink} to={`/post/${urlTitle}`}>
-                   <Typography variant="tileTitle">{title}</Typography>
+                    <Typography variant="tileTitle">{title}</Typography>
                 </Link>
-                <Typography variant='tileText' sx={{overflow: 'hidden'}}>{perex}</Typography>
+                <Typography variant="tileText" sx={{ overflow: 'hidden' }}>
+                    {perex}
+                </Typography>
             </Box>
-
         </Stack>
+    );
+};
 
-        </>
-    )               
-} 
+export default ResponsivePostTile;

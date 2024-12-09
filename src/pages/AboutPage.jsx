@@ -11,6 +11,7 @@ import batolatko from '../assets/images/batolatko.jpg';
 import notebook from '../assets/images/notebook.jpg';
 import katerinaKolarova from '../assets/images/katerina_kolarova.jpg';
 import medvidek from '../assets/images/medvidek.jpg';
+import naHristi from '../assets/images/na-hristi.jpg';
 
 
 export default function AboutPage() {
@@ -42,16 +43,18 @@ export default function AboutPage() {
       <>
         <Stack spacing={5}>
 
-          <Typography variant='h1' sx={{ mb: 2 }}>Ciao! Jmenuju se Katy a na rodičáku jsem se stala kodérkou</Typography>
+          <Typography variant='h1' sx={{ mb: 2 }}>Ciao! Jmenuju se Katy a na mateřské jsem začala programovat</Typography>
 
             <Box sx={{pb: 2}}>
-              <Typography variant='body1'>Jsem matka malé Emy, která se rozhodla, že rodičovskou využiju k tomu, že se naučím kódovat.</Typography>
+              <Typography variant='body1'>Teda abych byla přesná, s prvním kurzem jsem začala, když jsem byla v posledním trimestru těhotenství, ale nejsem si úplně jistá, zda to můžu počítat. Ono ten kolotoč, který nastal potom způsobil, že se mi zdá, že ty poslední měsíce přes porodem se mi snad jen zdály.</Typography>
               <br />
-              <Typography variant='body1'>Začala jsem prvním kurzem a zjistila, že už není cesty zpět a že mě kódování baví neskutečně víc, než moje předchozí povolání. Dělat si rekvalifikaci a zároveň se starat o dítko není vůbec jednoduché, ale já pevně věřím, že na konci tohohle bootcampu vylezu jako šikovný IT odborník.</Typography>
+              <Typography variant='body1'>Když bylo malé 3 měsíce a já měla konečně dost psychické a fyzické energie na to, abych si ke kurzu sedla znova, bylo to jako bych ho viděla prvně. Sice věřím, že nějaké principy mi v hlavě zůstaly, ale samotné techniky určitě ne.</Typography>
               <br />
-              <Typography variant='body1'>Chtěla bych zde vytvořit místo, kde se programátorky s dětmi nebudou bát sdílet své reálné zkušenosti. Ty dobré, i ty těžké.</Typography>
+              <Typography variant='body1'>Jak jsem ale zjistila později onen restart neznamenal jen to, že se mi z hlavy vykouřily technikálie kolem CSS, ale hlavně dost zásadní přestavbu v mé osobnosti. Získala jsem totiž něco, co mi v životě chybělo. Disciplínu, závazek a odhodlání.</Typography>
               <br />
-              <Typography variant='body1'>Věřím, že nikdy není pozdě začít a podle tohoto hesla se řídím celý život. Stačí jen překonat počáteční strach.</Typography>
+              <Typography variant='body1'>Když se ohlédnu zpětně na výčet, který uvidíte na následujících řádcích, vidím za ním stovky hodin práce, frustrace a radosti z programování. Myslím, že můžu říct, že mateřství a programování ze mě udělalo silnějšího a sebeuvědomělejšího člověka.</Typography>
+              <br />
+              <Typography variant='body1'>Pokud jste na začátku této cesty a jste tu pro inspiraci, chci říct, že i hodina denně se počítá a že ne vše, co jsem dělala já, bude fungovat i vám. Začněte a ta správná cesta se vám bude odkrývat postupně.</Typography>
             </Box>
           
           <Divider />
@@ -156,6 +159,16 @@ export default function AboutPage() {
                 }}
                 alt="placeholder"
                 src={katerinaKolarova}
+                />
+                <Box
+                component="img"
+                sx={{
+                    width: '300px',
+                    objectFit: 'cover', // Maintain aspect ratio and cover the area
+                    objectPosition: 'top', // Align the top part of the image with the top of the container
+                }}
+                alt="placeholder"
+                src={naHristi}
                 />
             </Stack>
 
