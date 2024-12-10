@@ -36,7 +36,7 @@ export default function PostDetailPage({ posts }) {
     <>
       <Stack spacing={6}>
 
-        <Stack spacing={3} sx={{ border: '1px solid var(--border-color)', px: {xs: 2, md: 10}, py: 4 }}>
+        <Stack spacing={3} sx={{ border: {xs: 'none', md: '1px solid var(--border-color)'}, px: {xs: 2, md: 10}, py: 4 }}>
           <Typography>{formattedDate}</Typography>
           <Typography variant="h1">{post.title}</Typography>
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
@@ -51,10 +51,25 @@ export default function PostDetailPage({ posts }) {
             <Typography variant='sectionTitle'>Další články o životě</Typography>
             <Link variant='body1' component={RouterLink} to='/ze-zivota'>Všechny články</Link>
           </Stack>
-          <Grid container >
-              {postsWithoutAuthor.slice(0,2).map((post, index) => (
-                <Grid item xs={12} sm={6} md={6} key={post.id} sx={{ display: 'flex', ...(index === 1 && { pl: 2 }) }}>
-                  <PostTile imgSrc='../littlehand_desktop.jpg' id={post.id} key={post.id} title={post.title} urlTitle={post.urlTitle} date={post.date} perex={post.perex} />
+
+          <Grid container spacing={2}>
+            {postsWithoutAuthor
+              .filter(p => p.id !== post.id) // Exclude the current post
+              .slice(0, 3)
+              .map((post, index) => (
+                <Grid item xs={12} sm={4} key={post.id} sx={{ display: 'flex' }}>
+                  <PostTile
+                    key={post.id}
+                    id={post.id}
+                    urlTitle={post.urlTitle}
+                    tags={post.tags}
+                    rating={post.rating}
+                    title={post.title}
+                    author={post.author}
+                    perex={post.perex}
+                    imgSrc={post.image}
+                    sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+                  />
                 </Grid>
               ))}
           </Grid>
