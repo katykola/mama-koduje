@@ -6,7 +6,6 @@ import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
 import '../styles/quill-custom.css'; // Import custom Quill stylesheet
 
 export default function QuillEditor({ value, onChange, label, name, errors }) {
-  console.log('Quill Editor', value);
   const quillRef = useRef(null);
   const quillInstance = useRef(null);
 

@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-import { Stack, Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Drawer, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
-
-const menuItems = [
-  { text: 'Odhlásit', path: '/admin' },
-];
 
 export default function AdminHeader() {
   const theme = useTheme(); // Use the theme and media query to determine if the screen size is mobile
@@ -25,10 +20,6 @@ export default function AdminHeader() {
     }
     setDrawerOpen(open);
   };
-
-  const handleClick = () => {
-
-  }
   
   const handleLogout = async () => {
     try {

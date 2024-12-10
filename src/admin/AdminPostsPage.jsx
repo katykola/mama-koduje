@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button } from '@mui/material';
-import { db } from '../config/firebase';
-import { collection, getDocs, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore';
+import { db, auth } from '../config/firebase';
+import { collection, getDoc, getDocs, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import AdminPostTile from './AdminPostTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
@@ -78,6 +78,11 @@ export default function AdminPostsPage() {
         imageUrl = await uploadImageToCloudinary(newImage);
       }
 
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
       await addDoc(collection(db, 'posts'), {
         title: newTitle,
         date: newDate ? newDate.toISOString() : null,
@@ -85,6 +90,7 @@ export default function AdminPostsPage() {
         content: newContent,
         urlTitle: generatedUrlTitle,
         image: imageUrl,
+        userId: user.uid, // Ensure the userId field matches the authenticated user's UID
       });
       getPosts();
       setNewTitle('');
@@ -101,29 +107,76 @@ export default function AdminPostsPage() {
 
   async function handleDeleteDoc() {
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
+      console.log('Attempting to delete document:', docToDelete);
+      console.log('Authenticated user ID:', user.uid);
+
       if (docToDelete) {
-        await deleteDoc(doc(db, 'posts', docToDelete));
-        getPosts();
-        setIsDialogOpen(false);
-        setDocToDelete(null);
+        const docRef = doc(db, 'posts', docToDelete);
+        const docSnapshot = await getDoc(docRef);
+
+        if (docSnapshot.exists()) {
+          console.log('Document exists:', docSnapshot.data());
+          console.log('Document userId:', docSnapshot.data().userId);
+          if (docSnapshot.data().userId === user.uid) {
+            await deleteDoc(docRef);
+            console.log('Document deleted successfully');
+            getPosts();
+            setIsDialogOpen(false);
+            setDocToDelete(null);
+          } else {
+            throw new Error('User does not have permission to delete this document');
+          }
+        } else {
+          throw new Error('Document does not exist');
+        }
       }
     } catch (err) {
-      console.log(err);
+      console.error('Error deleting document:', err);
     }
   }
 
   async function updatePost(id, date, title, perex, content, image) {
     try {
-      await updateDoc(doc(db, 'posts', id), {
-        date,
-        title,
-        perex,
-        content,
-        image
-      });
-      getPosts();
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+  
+      const docRef = doc(db, 'posts', id);
+      const docSnapshot = await getDoc(docRef);
+  
+      if (docSnapshot.exists()) {
+  
+        // Validate and format the date
+        const formattedDate = new Date(date);
+        if (isNaN(formattedDate.getTime())) {
+          throw new Error('Invalid Date');
+        }
+  
+        if (docSnapshot.data().userId === user.uid) {
+          await updateDoc(docRef, {
+            date: formattedDate.toISOString(),
+            title,
+            perex,
+            content,
+            image,
+            userId: user.uid, // Ensure the userId field matches the authenticated user's UID
+          });
+          console.log('Document updated successfully');
+          getPosts();
+        } else {
+          throw new Error('User does not have permission to update this document');
+        }
+      } else {
+        throw new Error('Document does not exist');
+      }
     } catch (err) {
-      console.log(err);
+      console.log('Error updating document:', err);
     }
   }
 

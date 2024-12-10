@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button } from '@mui/material';
 import { fetchCollection, addDocument, updateDocument, deleteDocument } from '../utils/firebaseUtils';
-import { deleteDoc, doc, getDocs, collection, addDoc } from 'firebase/firestore'; // Import necessary functions from Firebase
-import { db } from '../config/firebase'; // Import db from your Firebase config
+import { deleteDoc, doc, getDoc, getDocs, collection, addDoc } from 'firebase/firestore'; // Import necessary functions from Firebase
+import { db, auth } from '../config/firebase'; // Import db from your Firebase config
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
 import NewAdminReviewTile from './NewAdminReviewTile';
@@ -96,6 +96,11 @@ export default function NewAdminReviewsPage() {
     setUrlTitle(generatedUrlTitle);
 
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
       await addDoc(collection(db, 'posts'), {
         tags: newTags,
         title: newTitle,
@@ -108,8 +113,8 @@ export default function NewAdminReviewsPage() {
         negatives: newNegatives,
         link: newLink,
         urlTitle: generatedUrlTitle,
+        userId: user.uid, // Ensure the userId field matches the authenticated user's UID
       });
-      console.log(urlTitle);
       getPosts();
       setnewTags([]);
       setnewTitle('');
@@ -168,11 +173,33 @@ export default function NewAdminReviewsPage() {
   // Deleting a document
   async function handleDeleteDoc() {
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
+      console.log('Attempting to delete document:', docToDelete);
+      console.log('Authenticated user ID:', user.uid);
+
       if (docToDelete) {
-        await deleteDoc(doc(db, 'posts', docToDelete)); // Use deleteDoc and doc from Firebase
-        await getPosts(); // Reload posts after deletion
-        setIsDialogOpen(false);
-        setDocToDelete(null);
+        const docRef = doc(db, 'posts', docToDelete);
+        const docSnapshot = await getDoc(docRef);
+
+        if (docSnapshot.exists()) {
+          console.log('Document exists:', docSnapshot.data());
+          console.log('Document userId:', docSnapshot.data().userId);
+          if (docSnapshot.data().userId === user.uid) {
+            await deleteDoc(docRef);
+            console.log('Document deleted successfully');
+            getPosts();
+            setIsDialogOpen(false);
+            setDocToDelete(null);
+          } else {
+            throw new Error('User does not have permission to delete this document');
+          }
+        } else {
+          throw new Error('Document does not exist');
+        }
       }
     } catch (err) {
       console.error('Error deleting document:', err);
@@ -189,28 +216,51 @@ export default function NewAdminReviewsPage() {
     setDocToDelete(null);
   }
 
-  // Updating a document
-  async function updatePost(id, tags, title, author, date, rating, perex, content, positives, negatives, link) {
-    try {
-      await updateDocument('posts', id, {
-        tags,
-        date,
-        title,
-        author,
-        rating,
-        perex,
-        content,
-        positives,
-        negatives,
-        link,
-      });
-      const postsData = await fetchCollection('posts');
-      const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
-      setPosts(filteredData);
-    } catch (err) {
-      console.error('Error updating post:', err);
+ // Updating a document
+ async function updatePost(id, tags, title, author, date, rating, perex, content, positives, negatives, link) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User is not authenticated');
     }
+
+    console.log('Attempting to update document:', id);
+    console.log('Authenticated user ID:', user.uid);
+
+    const docRef = doc(db, 'posts', id);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      console.log('Document exists:', docSnapshot.data());
+      console.log('Document userId:', docSnapshot.data().userId);
+      console.log('Authenticated user ID:', user.uid);
+      if (docSnapshot.data().userId === user.uid) {
+        await updateDocument('posts', id, {
+          tags,
+          date,
+          title,
+          author,
+          rating,
+          perex,
+          content,
+          positives,
+          negatives,
+          link,
+        });
+        console.log('Document updated successfully');
+        const postsData = await fetchCollection('posts');
+        const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
+        setPosts(filteredData);
+      } else {
+        throw new Error('User does not have permission to update this document');
+      }
+    } else {
+      throw new Error('Document does not exist');
+    }
+  } catch (err) {
+    console.error('Error updating post:', err);
   }
+}
 
   return (
     <>

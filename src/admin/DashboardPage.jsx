@@ -6,9 +6,8 @@ import Box from '@mui/material/Box';
 import AdminHeader from './AdminHeader';
 import AdminLifePage from './AdminLifePage';
 import AdminPostsPage from './AdminPostsPage';
-import AdminReviewsPage from './AdminReviewsPage';
 import NewAdminReviewsPage from './NewAdminReviewsPage';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack } from '@mui/material';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;

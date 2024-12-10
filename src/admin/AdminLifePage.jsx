@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Box, Button, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { db } from '../config/firebase';
-import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { Stack,Button } from '@mui/material';
+import { db, auth } from '../config/firebase';
+import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import AdminLifeTile from './AdminLifeTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
 
 export default function AdminLifePage() {
+
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [lifeXPList, setLifeXPList] = useState([]);
   const [newLifeXPOrder, setNewLifeXPOrder] = useState('');
@@ -54,12 +55,18 @@ export default function AdminLifePage() {
     if (!validateFields()) return;
 
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
       await addDoc(lifeXPCollectionRef, {
         order: newLifeXPOrder,
         date: newLifeXPDate,
         title: newLifeXPTitle,
         subtitle: newLifeXPSubtitle,
         text: newLifeXPText,
+        userId: user.uid, // Ensure the userId field matches the authenticated user's UID
       });
       getLifeXPList();
       setNewLifeXPOrder('');
@@ -76,27 +83,56 @@ export default function AdminLifePage() {
 
   async function handleDeleteDoc() {
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
+
       if (docToDelete) {
-        await deleteDoc(doc(db, 'lifeExperience', docToDelete));
-        getLifeXPList();
-        setIsDialogOpen(false);
-        setDocToDelete(null);
+        const docRef = doc(db, 'lifeExperience', docToDelete);
+        const docSnapshot = await getDoc(docRef);
+
+        if (docSnapshot.exists()) {
+          if (docSnapshot.data().userId === user.uid) {
+            await deleteDoc(docRef);
+            getLifeXPList();
+            setIsDialogOpen(false);
+            setDocToDelete(null);
+          } else {
+            throw new Error('User does not have permission to delete this document');
+          }
+        } else {
+          throw new Error('Document does not exist');
+        }
       }
     } catch (err) {
-      console.log(err);
+      console.log('Error in handleDeleteDoc:', err);
     }
   }
 
   async function updateLifeXP(id, order, date, title, subtitle, text) {
     try {
-      await updateDoc(doc(db, 'lifeExperience', id), {
-        order,
-        date,
-        title,
-        subtitle,
-        text,
-      });
-      getLifeXPList();
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User is not authenticated');
+      }
+
+      const docRef = doc(db, 'lifeExperience', id);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists() && docSnapshot.data().userId === user.uid) {
+        await updateDoc(docRef, {
+          order,
+          date,
+          title,
+          subtitle,
+          text,
+        });
+        getLifeXPList();
+      } else {
+        throw new Error('User does not have permission to update this document');
+      }
     } catch (err) {
       console.log(err);
     }

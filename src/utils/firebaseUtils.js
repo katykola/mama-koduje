@@ -1,5 +1,5 @@
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db, auth } from '../config/firebase'; // Import the auth object
 
 export async function fetchCollection(collectionName) {
   try {
@@ -42,7 +42,17 @@ export async function fetchExistingTags(collectionName) {
 
 export async function addDocument(collectionName, document) {
   try {
-    await addDoc(collection(db, collectionName), document);
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
+    const documentWithUserId = {
+      ...document,
+      userId: user.uid, // Ensure the userId field matches the authenticated user's UID
+    };
+
+    await addDoc(collection(db, collectionName), documentWithUserId);
   } catch (err) {
     console.error(err);
   }
@@ -50,7 +60,17 @@ export async function addDocument(collectionName, document) {
 
 export async function updateDocument(collectionName, id, document) {
   try {
-    await updateDoc(doc(db, collectionName, id), document);
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
+    const documentWithUserId = {
+      ...document,
+      userId: user.uid, // Ensure the userId field matches the authenticated user's UID
+    };
+
+    await updateDoc(doc(db, collectionName, id), documentWithUserId);
   } catch (err) {
     console.error(err);
   }
@@ -58,6 +78,11 @@ export async function updateDocument(collectionName, id, document) {
 
 export async function deleteDocument(collectionName, id) {
   try {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
     await deleteDoc(doc(db, collectionName, id));
   } catch (err) {
     console.error(err);
