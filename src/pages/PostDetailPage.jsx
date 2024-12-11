@@ -3,7 +3,8 @@ import { Stack, Grid, Box, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MainImage from '../components/MainImage';
 import PostTile from '../components/PostTile';
-import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
+import DOMPurify from 'dompurify';
+import '../styles/quill-custom.css';
 
 export default function PostDetailPage({ posts }) {
 
@@ -32,6 +33,8 @@ export default function PostDetailPage({ posts }) {
     year: 'numeric',
   });
 
+  const sanitizedContent = DOMPurify.sanitize(post.content);
+
   return (
     <>
       <Stack spacing={6}>
@@ -42,7 +45,7 @@ export default function PostDetailPage({ posts }) {
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>
           <MainImage imgSrc={post.image} />
           <Box className="ql-snow">
-             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </Box>
         </Stack>
 

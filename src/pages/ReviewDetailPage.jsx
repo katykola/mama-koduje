@@ -3,9 +3,11 @@ import { Stack, Box, Grid, Link, Typography, Rating } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import CircleIcon from '@mui/icons-material/Circle'; 
 import ReviewTile from '../components/ReviewTile';
-import 'quill/dist/quill.snow.css'; // Import Quill stylesheet
 import { useMediaQuery } from '@mui/material';
 import theme from '../styles/theme';
+import DOMPurify from 'dompurify';
+import '../styles/quill-custom.css';
+
 
 export default function ReviewDetailPage({posts}) {
 
@@ -36,6 +38,7 @@ export default function ReviewDetailPage({posts}) {
         year: 'numeric',
       });
 
+      const sanitizedContent = DOMPurify.sanitize(review.content);
     
       return (
             <>
@@ -61,7 +64,7 @@ export default function ReviewDetailPage({posts}) {
           <Typography variant="body1">{review.author}</Typography>
           <Typography variant="body1" sx={{fontWeight: 600}}>{review.perex}</Typography>
           <Box className="ql-snow">
-             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: review.content }} />
+             <Box className="ql-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </Box>
         
           {isMobile ? ( 

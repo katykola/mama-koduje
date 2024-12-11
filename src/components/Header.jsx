@@ -9,7 +9,7 @@ import Icons from './Icons';
 const menuItems = [
   { text: 'Home', path: '/' },
   { text: 'Recenze', path: '/recenze' },
-  { text: 'Ze života', path: '/ze-zivota' },
+  { text: 'Ze života', path: '/clanky' },
   { text: 'O mě', path: '/o-me' },
 ];
 

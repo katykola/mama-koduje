@@ -65,7 +65,7 @@ const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) =
                 <Typography variant="tileTextSm" sx={{ marginBottom: '0.5rem' }}>
                     {formattedDate}
                 </Typography>
-                <Link component={RouterLink} to={`/post/${urlTitle}`}>
+                <Link component={RouterLink} to={`/clanky/${urlTitle}`}>
                     <Typography variant="tileTitle">{title}</Typography>
                 </Link>
                 <Typography variant="tileText" sx={{ overflow: 'hidden' }}>
