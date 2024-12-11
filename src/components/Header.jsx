@@ -50,8 +50,8 @@ export default function Header() {
               onClose={toggleDrawer(false)} 
               sx={{'& .MuiDrawer-paper': {width: '80%', backgroundColor: '#FFEDED'}}}
               >
-              <Box sx={{ padding:'1rem', display:'flex', justifyContent:'space-between' }}>
-                <DarkModeOutlinedIcon/>
+              <Box sx={{ padding:'1rem', display:'flex', justifyContent:'end' }}>
+                {/* <DarkModeOutlinedIcon/> */}
                 <CloseOutlinedIcon onClick={toggleDrawer(false)} />
               </Box>
               <List>
