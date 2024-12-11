@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Add this line to enable manual triggering
 permissions:
   contents: read
   id-token: write
@@ -35,9 +36,12 @@ jobs:
         run: npm run build
 
       - name: Debug environment variables
-        run: printenv
+        run: echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAMAKODUJE_CC7D1 }}
         env:
           FIREBASE_SERVICE_ACCOUNT_MAMAKODUJE_CC7D1: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MAMAKODUJE_CC7D1 }}
+
+      - name: Echo Firebase Token
+        run: echo ${{ secrets.FIREBASE_TOKEN }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
