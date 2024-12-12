@@ -43,7 +43,7 @@ export default function AboutPage() {
       <>
         <Stack spacing={5}>
 
-          <Typography variant='h1' sx={{ mb: 2 }}>Ciao! Testuju! Jmenuju se Katy a na mateřské jsem začala programovat</Typography>
+          <Typography variant='h1' sx={{ mb: 2 }}>Ciao! Jmenuju se Katy a na mateřské jsem začala programovat</Typography>
 
             <Box sx={{pb: 2}}>
               <Typography variant='body1'>Teda abych byla přesná, s prvním kurzem jsem začala, když jsem byla v posledním trimestru těhotenství, ale nejsem si úplně jistá, zda to můžu počítat. Ono ten kolotoč, který nastal potom způsobil, že se mi zdá, že ty poslední měsíce přes porodem se mi snad jen zdály.</Typography>
