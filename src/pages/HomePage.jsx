@@ -8,6 +8,7 @@ import katyVeSlunci from '../assets/images/katy-ve-slunci300.jpg';
 import { useMediaQuery } from '@mui/material';
 import theme from '../styles/theme';
 
+
 export default function HomePage({posts}) {
 
     const postsWithAuthor = posts.filter(post => post.author);
