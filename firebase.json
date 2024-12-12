@@ -11,6 +11,88 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "redirects": [
+      {
+        "source": "/recenze-kurzu/",
+        "destination": "/recenze",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu-stan-se-koderkou-od-czechitas/",
+        "destination": "/recenze/stan-se-koderkou",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu-responsive-web-design-od-freecodecamp/",
+        "destination": "/recenze/responsive-web-design-od-freecodecamp",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu-the-ultimate-html5-and-css3-series-od-code-with-mosh/",
+        "destination": "/recenze/the-ultimate-html5css3-series",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu-javascript-101-od-ludka-rolecka/",
+        "destination": "/recenze/javascript-101-od-ludka-rolecka",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu/all/",
+        "destination": "/recenze",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu/javascript/",
+        "destination": "/recenze",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu/posts/",
+        "destination": "/recenze",
+        "type": 301
+      },
+      {
+        "source": "/recenze-kurzu/htmlcss/",
+        "destination": "/recenze",
+        "type": 301
+      },
+      {
+        "source": "/kontakt/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/ze-zivota/",
+        "destination": "/clanky",
+        "type": 301
+      },
+      {
+        "source": "/ze-zivota/all/",
+        "destination": "/clanky",
+        "type": 301
+      },
+      {
+        "source": "/ze-zivota/osobni/",
+        "destination": "/clanky",
+        "type": 301
+      },
+      {
+        "source": "/jak-se-jako-matka-dobre-vyspat-dojmy-z-prvni-ruky/",
+        "destination": "/clanky/jak-se-jako-matka-dobre-vyspat-dojmy-z-prvni-ruky",
+        "type": 301
+      },
+      {
+        "source": "/prvni-rok-na-materske-a-kodeni-jak-to-slo/",
+        "destination": "/clanky/prvni-rok-na-materske-a-kodeni-jak-to-slo",
+        "type": 301
+      },
+      {
+        "source": "/plan-releasu-moje-vize-na-pristich-5-let/",
+        "destination": "/clanky/plan-releasu-moje-vize-na-pristich-5-let",
+        "type": 301
+      }
     ]
   }
 }
