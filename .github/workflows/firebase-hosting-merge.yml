@@ -23,24 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Use secrets as environment variables
-        env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
-        run: |
-          echo "VITE_FIREBASE_API_KEY is $VITE_FIREBASE_API_KEY"
-          echo "VITE_FIREBASE_AUTH_DOMAIN is $VITE_FIREBASE_AUTH_DOMAIN"
-          echo "VITE_FIREBASE_PROJECT_ID is $VITE_FIREBASE_PROJECT_ID"
-          echo "VITE_FIREBASE_STORAGE_BUCKET is $VITE_FIREBASE_STORAGE_BUCKET"
-          echo "VITE_FIREBASE_MESSAGING_SENDER_ID is $VITE_FIREBASE_MESSAGING_SENDER_ID"
-          echo "VITE_FIREBASE_APP_ID is $VITE_FIREBASE_APP_ID"
-          echo "VITE_FIREBASE_MEASUREMENT_ID is $VITE_FIREBASE_MEASUREMENT_ID"
-
       - name: Build project
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
@@ -54,10 +36,6 @@ jobs:
 
       - name: Debug build output
         run: grep -r "apiKey" dist/
-
-      - name: Pass secrets directly into a script
-        run: |
-          ./deploy.sh ${{ secrets.DEPLOY_SECRET }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
