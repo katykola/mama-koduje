@@ -2,6 +2,8 @@
 
 This blog is a personal journey of mine as a self-taught developer and mother. It chronicles my path to becoming a developer during maternity leave, sharing the challenges, triumphs, and lessons learned along the way. Through detailed course reviews, a timeline of my learning process, and insights into balancing motherhood with career development, I aim to inspire others who are on similar journeys. The blog also includes my life plans, growth as a developer, and reflections on how I’ve managed to pursue my passion while raising a family.
 
+![Design of the Máma kóduje blog](./public/mamakoduje_screenshot_sm.png)
+
 ## Technologies Used
 
 Here are the main technologies and tools I use to build and manage the blog:
