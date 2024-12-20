@@ -34,7 +34,7 @@ export default function Header() {
         <Typography sx={{ fontSize: '4rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
       </Box>
     )}  
-    <AppBar position={isMobile ? 'fixed' : 'static'} sx={{ backgroundColor: '#FFEDED', boxShadow: 'none', borderTop: isMobile ? undefined : '1px solid #9C9C9C', borderBottom: '1px solid #9C9C9C' }} >
+    <AppBar position={isMobile ? 'fixed' : 'static'} sx={{ backgroundColor: '#FFEDED', boxShadow: 'none', borderTop: isMobile ? undefined : '1px solid #9C9C9C', borderBottom: '1px solid #9C9C9C', height: isMobile ? '4rem' : undefined }} >
       <Toolbar sx={{ width: '100%', justifyContent: 'center', py: 2 }} >
         {isMobile ? (
           <>
