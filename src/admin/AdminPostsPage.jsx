@@ -112,19 +112,13 @@ export default function AdminPostsPage() {
         throw new Error('User is not authenticated');
       }
 
-      console.log('Attempting to delete document:', docToDelete);
-      console.log('Authenticated user ID:', user.uid);
-
       if (docToDelete) {
         const docRef = doc(db, 'posts', docToDelete);
         const docSnapshot = await getDoc(docRef);
 
         if (docSnapshot.exists()) {
-          console.log('Document exists:', docSnapshot.data());
-          console.log('Document userId:', docSnapshot.data().userId);
           if (docSnapshot.data().userId === user.uid) {
             await deleteDoc(docRef);
-            console.log('Document deleted successfully');
             getPosts();
             setIsDialogOpen(false);
             setDocToDelete(null);
@@ -167,7 +161,6 @@ export default function AdminPostsPage() {
             image,
             userId: user.uid, // Ensure the userId field matches the authenticated user's UID
           });
-          console.log('Document updated successfully');
           getPosts();
         } else {
           throw new Error('User does not have permission to update this document');

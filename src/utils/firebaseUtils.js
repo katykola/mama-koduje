@@ -19,8 +19,6 @@ export async function fetchExistingTags(collectionName) {
     const data = await getDocs(collection(db, collectionName));
     const tags = data.docs.flatMap(doc => {
       const docData = doc.data();
-      console.log(docData); 
-      console.log(docData.tags); 
 
       if (docData.tags === undefined) {
         console.warn(`Document ${doc.id} does not have a tags field`);

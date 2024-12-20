@@ -10,8 +10,16 @@ const theme = createTheme({
     h1: {
       fontFamily: 'Inria Serif, serif',
       fontWeight: 700,
-      fontSize: '2.2rem',
-      lineHeight: 1.2,
+      letterSpacing: '1px',
+      fontSize: {
+        xs: '1.7rem',
+        sm: '2.2rem',
+      },
+      lineHeight: 1.4,
+      mb: {
+        xs: '1rem',
+        sm: 0,
+      }
     },
     h2: {
       fontWeight: 700,
@@ -29,18 +37,18 @@ const theme = createTheme({
       fontSize: '1rem', 
       fontFamily:'var(--font-family)', 
       fontWeight: '600', 
-      textDecoration:'underline', 
       color: 'var(--tertiary-color)', 
-      mt: '1rem'
+      lineHeight: 1.5
     },
     author: {
       fontSize: '0.9rem', 
       fontFamily:'var(--font-family)', 
       fontWeight: '200', 
-      color: 'var(--secondary-color)'
+      color: 'var(--secondary-color)',
+      marginTop: '0.5rem',
     },  
     tileText: {
-      fontSize:'0.85rem', 
+      fontSize:{ xs: '1rem', sm: '0.9rem'}, 
       marginTop: '1rem',
       fontFamily: 'Inter, sans-serif',
       fontWeight: 200,
@@ -95,11 +103,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           cursor: 'pointer',
-          color: 'inherit',
-          textDecorationColor: 'inherit',
-          '&:hover': {
-            color: '#222222',
-          },
+          color: 'var(--tertiary-color)',
+          textDecoration: 'none',
         },
       },
     },

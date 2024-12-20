@@ -4,8 +4,10 @@ import { Link as RouterLink } from 'react-router-dom';
 export default function ReviewTile({ title, urlTitle, author, perex, tags, rating }) {
   return (
     <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
-        <Stack direction='row' spacing={1}>
+      <Box sx={{border: '1px solid var(--border-color)' }} >
+      <Link component={RouterLink} to={`/recenze/${urlTitle}`} >
+      <Box sx={{  padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left' }} >
+        <Stack direction='row' spacing={1} sx={{  mb: '1rem' }}>
           {tags.map((tag, id) => (
             <Typography key={id} sx={{ fontSize: '1rem', fontFamily:'Inria Sans', fontWeight: '300', color: 'white', backgroundColor:'var(--secondary-color)', p: '0.5rem' }}>{tag}</Typography>
           ))}
@@ -21,15 +23,16 @@ export default function ReviewTile({ title, urlTitle, author, perex, tags, ratin
             '& .MuiRating-iconHover': {
               color: 'var(--tertiary-color)', 
             },
-            my: '1rem'
+            mt: '1rem',
+            mb: '0.5rem'
           }}  
         />
-        <Link component={RouterLink} to={`/recenze/${urlTitle}`}>
-          <Typography variant="tileTitle">{title}</Typography>
-        </Link>
+        <Typography variant="tileTitle">{title}</Typography>
         <Typography variant="author">{author}</Typography>
-        <Typography variant="tileText">{perex}</Typography>
+        <Typography variant="tileText" style={{ mt: '1rem' }}>{perex}</Typography>
       </Box>
+        </Link>
+        </Box>
     </>
   );
 }

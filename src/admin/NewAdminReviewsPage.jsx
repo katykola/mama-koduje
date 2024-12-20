@@ -178,19 +178,13 @@ export default function NewAdminReviewsPage() {
         throw new Error('User is not authenticated');
       }
 
-      console.log('Attempting to delete document:', docToDelete);
-      console.log('Authenticated user ID:', user.uid);
-
       if (docToDelete) {
         const docRef = doc(db, 'posts', docToDelete);
         const docSnapshot = await getDoc(docRef);
 
         if (docSnapshot.exists()) {
-          console.log('Document exists:', docSnapshot.data());
-          console.log('Document userId:', docSnapshot.data().userId);
           if (docSnapshot.data().userId === user.uid) {
             await deleteDoc(docRef);
-            console.log('Document deleted successfully');
             getPosts();
             setIsDialogOpen(false);
             setDocToDelete(null);
@@ -224,16 +218,12 @@ export default function NewAdminReviewsPage() {
       throw new Error('User is not authenticated');
     }
 
-    console.log('Attempting to update document:', id);
-    console.log('Authenticated user ID:', user.uid);
+    ('Attempting to update document:', id);
 
     const docRef = doc(db, 'posts', id);
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
-      console.log('Document exists:', docSnapshot.data());
-      console.log('Document userId:', docSnapshot.data().userId);
-      console.log('Authenticated user ID:', user.uid);
       if (docSnapshot.data().userId === user.uid) {
         await updateDocument('posts', id, {
           tags,
@@ -247,7 +237,6 @@ export default function NewAdminReviewsPage() {
           negatives,
           link,
         });
-        console.log('Document updated successfully');
         const postsData = await fetchCollection('posts');
         const filteredData = postsData.filter((post) => post.author); // Filter out posts with an author
         setPosts(filteredData);

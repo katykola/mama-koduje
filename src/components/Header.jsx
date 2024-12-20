@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Stack, Box, AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
@@ -34,14 +34,14 @@ export default function Header() {
         <Typography sx={{ fontSize: '4rem', fontFamily: 'Inknut Antiqua', fontWeight: 600, my:'1rem'}}>Máma kóduje</Typography>
       </Box>
     )}  
-    <AppBar position="static" sx={{ backgroundColor: '#FFEDED', boxShadow: 'none', borderTop: isMobile ? undefined : '1px solid #9C9C9C', borderBottom: '1px solid #9C9C9C' }} >
-      <Toolbar sx={{ width: '100%', justifyContent: 'center' }} >
+    <AppBar position={isMobile ? 'fixed' : 'static'} sx={{ backgroundColor: '#FFEDED', boxShadow: 'none', borderTop: isMobile ? undefined : '1px solid #9C9C9C', borderBottom: '1px solid #9C9C9C' }} >
+      <Toolbar sx={{ width: '100%', justifyContent: 'center', py: 2 }} >
         {isMobile ? (
           <>
-            <Typography style={{ flexGrow: 1 }} sx={{ fontFamily: 'Inknut Antiqua', fontWeight: 600, color:'#222222'}}>
-              Máma kóduje
+            <Typography style={{ flexGrow: 1 }} sx={{ fontFamily: 'Inknut Antiqua', fontWeight: 600, color:'#222222', fontSize: '1.4rem'}}>
+              <Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>Máma kóduje</Link>
             </Typography>
-            <Button variant='outlined' edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
+            <Button variant='outlined' edge="start" color="inherit" aria-label="menu" sx={{ fontSize: '1rem' }} onClick={toggleDrawer(true)}>
               Menu
             </Button>
             <Drawer 

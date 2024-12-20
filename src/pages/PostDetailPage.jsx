@@ -39,7 +39,7 @@ export default function PostDetailPage({ posts }) {
     <>
       <Stack spacing={6}>
 
-        <Stack spacing={3} sx={{ border: {xs: 'none', md: '1px solid var(--border-color)'}, px: {xs: 2, md: 10}, py: 4 }}>
+        <Stack spacing={3} sx={{ border: {xs: 'none', md: '1px solid var(--border-color)'}, px: {xs: 2, md: 10}, py: {xs: 0, md: 4} }}>
           <Typography>{formattedDate}</Typography>
           <Typography variant="h1">{post.title}</Typography>
           <Typography variant="body1" sx={{fontWeight: 500}}>{post.perex}</Typography>

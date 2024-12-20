@@ -24,6 +24,8 @@ const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) =
     }, []);
 
     return (
+        <Box>
+        <Link component={RouterLink} to={`/clanky/${urlTitle}`}>
         <Stack
             ref={stackRef}
             direction={isNarrow ? 'column' : 'row'} // Conditional direction based on width
@@ -65,14 +67,14 @@ const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) =
                 <Typography variant="tileTextSm" sx={{ marginBottom: '0.5rem' }}>
                     {formattedDate}
                 </Typography>
-                <Link component={RouterLink} to={`/clanky/${urlTitle}`}>
                     <Typography variant="tileTitle">{title}</Typography>
-                </Link>
                 <Typography variant="tileText" sx={{ overflow: 'hidden' }}>
                     {perex}
                 </Typography>
             </Box>
         </Stack>
+        </Link>
+        </Box>
     );
 };
 

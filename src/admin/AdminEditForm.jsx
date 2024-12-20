@@ -26,18 +26,14 @@ export default function AdminEditForm({
   const fields = getFields(values, isPost, isLifeXP); // Generate fields array using getFields function
 
   useEffect(() => {
-    console.log('Initial values:', values);
-    console.log('Initial content:', content);
   }, [values, content]);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    console.log('Uploading new image:', file);
     setNewImage(file);
 
     try {
       const imageUrl = await uploadImageToCloudinary(file);
-      console.log('Uploaded image URL:', imageUrl);
       setImage(imageUrl);
       onChange('image', imageUrl); // Update the parent component state with the new image URL
     } catch (error) {
@@ -57,7 +53,6 @@ export default function AdminEditForm({
                     label={field.label}
                     value={field.value}
                     onChange={(newValue) => {
-                      console.log(`Date changed for ${field.name}:`, newValue);
                       onChange(field.name, newValue);
                     }}
                     renderInput={(params) => (
@@ -76,7 +71,6 @@ export default function AdminEditForm({
                   label={field.label}
                   values={field.value}
                   onChange={(newValue) => {
-                    console.log(`Array field changed for ${field.name}:`, newValue);
                     onChange(field.name, newValue);
                   }}
                   existingItems={existingTags}
@@ -92,7 +86,6 @@ export default function AdminEditForm({
                   value={field.value}
                   name={field.name}
                   onChange={(name, newValue) => {
-                    console.log(`Content changed for ${name}:`, newValue);
                     onChange(name, newValue);
                   }}
                   errors={errors}
@@ -124,7 +117,6 @@ export default function AdminEditForm({
                   id={field.name}
                   value={field.value}
                   onChange={(e) => {
-                    console.log(`Number field changed for ${field.name}:`, e.target.value);
                     onChange(field.name, Number(e.target.value));
                   }}
                   error={!!errors[field.name]}
@@ -139,7 +131,6 @@ export default function AdminEditForm({
                     name={field.name}
                     value={field.value}
                     onChange={(e) => {
-                      console.log(`Rating changed for ${field.name}:`, e.target.value);
                       onChange(field.name, Number(e.target.value));
                     }}
                   />
@@ -156,7 +147,6 @@ export default function AdminEditForm({
                   id={field.name}
                   value={field.value}
                   onChange={(e) => {
-                    console.log(`Field changed for ${field.name}:`, e.target.value);
                     onChange(field.name, e.target.value);
                   }}
                   error={!!errors[field.name]}
