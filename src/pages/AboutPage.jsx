@@ -12,7 +12,7 @@ import notebook from '../assets/images/notebook.jpg';
 import katerinaKolarova from '../assets/images/katerina_kolarova.jpg';
 import medvidek from '../assets/images/medvidek.jpg';
 import naHristi from '../assets/images/na-hristi.jpg';
-
+import KaterinaKolarova2 from '../assets/images/katerina-kolarova.jpg';
 
 export default function AboutPage() {
 
@@ -167,6 +167,16 @@ export default function AboutPage() {
                 }}
                 alt="placeholder"
                 src={naHristi}
+                />
+                <Box
+                component="img"
+                sx={{
+                    width: '300px',
+                    objectFit: 'cover', // Maintain aspect ratio and cover the area
+                    objectPosition: 'top', // Align the top part of the image with the top of the container
+                }}
+                alt="placeholder"
+                src={KaterinaKolarova2}
                 />
             </Stack>
 
