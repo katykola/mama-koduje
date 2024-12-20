@@ -1,11 +1,16 @@
-import { Box, Typography, Link, Stack } from '@mui/material';
+import { Box, Typography, Link, Stack, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 export default function LifeTile({ order, date, title, subtitle, text}) {
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     return(
 
         <Stack direction='column' sx={{ }}>
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'start' : 'center', justifyContent: 'center', textAlign: 'left', backgroundColor:'#FFEDED', padding: '2rem', border: '1px solid var(--border-color)' }} >
                 <Stack direction='row' spacing={1} sx={{ alignItems: 'baseline', justifyContent:'center' }}>
                     <Box
                         sx={{

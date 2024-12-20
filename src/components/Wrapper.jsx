@@ -8,7 +8,7 @@ export default function Wrapper({ children }) {
 
     return (
         <>
-        <Box sx={{ backgroundColor: 'var(--primary-color)', minHeight: 'calc(100vh - 64px)', py: {xs: 12, sm: 12, md: 6}, px: {xs: 2} }}>
+        <Box sx={{ backgroundColor: 'var(--primary-color)', minHeight: 'calc(100vh - 64px)', pt: {xs: 12, sm: 12, md: 6}, pb: 6, px: {xs: 2} }}>
         <Container maxWidth="md">
             {children}
         </Container>
