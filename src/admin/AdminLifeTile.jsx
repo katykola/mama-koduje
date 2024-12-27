@@ -32,6 +32,7 @@ export default function AdminLifeTile({ id, order, date, title, subtitle, text, 
     }, false, true);
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
+
     updateLifeXP(id, editedOrder, editedDate, editedTitle, editedSubtitle, editedText);
     setIsEditing(false);
   };

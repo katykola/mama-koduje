@@ -36,6 +36,7 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
   };
 
   const handleSave = () => {
+    console.log('handleSave');
     const newErrors = validateFields({
       tags: editedTags,
       title: editedTitle,

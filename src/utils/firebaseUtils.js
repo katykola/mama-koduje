@@ -59,6 +59,7 @@ export async function addDocument(collectionName, document) {
 export async function updateDocument(collectionName, id, document) {
   try {
     const user = auth.currentUser;
+    console.log( 'UID:', user.uid);
     if (!user) {
       throw new Error('User is not authenticated');
     }
@@ -67,6 +68,7 @@ export async function updateDocument(collectionName, id, document) {
       ...document,
       userId: user.uid, // Ensure the userId field matches the authenticated user's UID
     };
+    console.log('userId:', documentWithUserId.userId);
 
     await updateDoc(doc(db, collectionName, id), documentWithUserId);
   } catch (err) {

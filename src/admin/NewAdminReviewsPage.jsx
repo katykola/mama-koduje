@@ -223,6 +223,11 @@ export default function NewAdminReviewsPage() {
     const docRef = doc(db, 'posts', id);
     const docSnapshot = await getDoc(docRef);
 
+    console.log('docSnapshot:', docSnapshot.data());
+    console.log('docSnapshot.data().id:', docSnapshot.data().id);
+
+    console.log('docSnapshot.data().userId:', docSnapshot.data().userId);
+
     if (docSnapshot.exists()) {
       if (docSnapshot.data().userId === user.uid) {
         await updateDocument('posts', id, {

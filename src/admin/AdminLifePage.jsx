@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Stack,Button } from '@mui/material';
 import { db, auth } from '../config/firebase';
+import { fetchCollection, addDocument, updateDocument, deleteDocument } from '../utils/firebaseUtils';
 import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import AdminLifeTile from './AdminLifeTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
@@ -111,30 +112,42 @@ export default function AdminLifePage() {
     }
   }
 
-  async function updateLifeXP(id, order, date, title, subtitle, text) {
+   async function updateLifeXP(id, order, date, title, subtitle, text) {
     try {
       const user = auth.currentUser;
       if (!user) {
         throw new Error('User is not authenticated');
       }
 
+      console.log('user auth:', user.uid);
+      console.log('Attempting to update document:', id);
+  
       const docRef = doc(db, 'lifeExperience', id);
       const docSnapshot = await getDoc(docRef);
 
-      if (docSnapshot.exists() && docSnapshot.data().userId === user.uid) {
-        await updateDoc(docRef, {
-          order,
-          date,
-          title,
-          subtitle,
-          text,
-        });
-        getLifeXPList();
+      console.log('docSnapshot:', docSnapshot.data());
+  
+      if (docSnapshot.exists()) {
+        console.log('true');
+        if (docSnapshot.data().userId === user.uid) {
+          console.log('docSnapshot.data().userId:', docSnapshot.data().userId);
+          console.log('docSnapshot.data().id:', docSnapshot.data().id);
+          await updateDocument('lifeExperience', id, {
+            order,
+            date,
+            title,
+            subtitle,
+            text,
+          });
+          getLifeXPList();
+        } else {
+          throw new Error('User does not have permission to update this document');
+        }
       } else {
-        throw new Error('User does not have permission to update this document');
+        throw new Error('Document does not exist');
       }
     } catch (err) {
-      console.log(err);
+      console.error('Error updating post:', err);
     }
   }
 
