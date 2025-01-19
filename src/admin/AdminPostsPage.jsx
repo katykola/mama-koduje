@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Stack, Button } from '@mui/material';
 import { db, auth } from '../config/firebase';
 import { collection, getDoc, getDocs, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore';
@@ -11,10 +11,14 @@ export default function AdminPostsPage() {
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [posts, setPosts] = useState([]);
   const [newTitle, setNewTitle] = useState('');
+  const [newTitleEng, setNewTitleEng] = useState('');
   const [newDate, setNewDate] = useState(new Date());
   const [newPerex, setNewPerex] = useState('');
+  const [newPerexEng, setNewPerexEng] = useState('');
   const [newContent, setNewContent] = useState('');
+  const [newContentEng, setNewContentEng] = useState('');
   const [urlTitle, setUrlTitle] = useState('');
+  const [urlTitleEng, setUrlTitleEng] = useState('');
   const [newImage, setNewImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -58,19 +62,26 @@ export default function AdminPostsPage() {
   function validateFields() {
     const newErrors = {};
     if (!newTitle) newErrors.title = 'Název je povinné';
+    if (!newTitleEng) newErrors.title_eng = 'Název je povinné';
     if (!newDate) newErrors.date = 'Datum je povinné';
     if (!newPerex) newErrors.perex = 'Perex je povinné';
+    if (!newPerexEng) newErrors.perex_eng = 'Perex is required';
     if (!newContent) newErrors.content = 'Obsah je povinné';
+    if (!newContentEng) newErrors.content_eng = 'Obsah je povinné';
     if (!newImage) newErrors.image = 'Obrázek je povinný';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
 
   async function onSubmitPost() {
+    console.log('onSubmitPost');
     if (!validateFields()) return;
 
     const generatedUrlTitle = generateUrlTitle(newTitle);
     setUrlTitle(generatedUrlTitle);
+
+    const generatedUrlTitleEng = generateUrlTitle(newTitleEng);
+    setUrlTitleEng(generatedUrlTitleEng);
 
     try {
       let imageUrl = '';
@@ -85,19 +96,27 @@ export default function AdminPostsPage() {
 
       await addDoc(collection(db, 'posts'), {
         title: newTitle,
+        title_eng: newTitleEng,
         date: newDate ? newDate.toISOString() : null,
         perex: newPerex,
+        perex_eng: newPerexEng,
         content: newContent,
+        content_eng: newContentEng,
         urlTitle: generatedUrlTitle,
+        urlTitle_eng: generatedUrlTitleEng,
         image: imageUrl,
         userId: user.uid, // Ensure the userId field matches the authenticated user's UID
       });
       getPosts();
       setNewTitle('');
+      setNewTitleEng('');
       setNewDate(new Date());
       setNewPerex('');
+      setNewPerexEng('');
       setNewContent('');
+      setNewContentEng('');
       setUrlTitle('');
+      setUrlTitleEng('');
       setNewImage(null);
       toggleCreateNew();
     } catch (err) {
@@ -134,7 +153,7 @@ export default function AdminPostsPage() {
     }
   }
 
-  async function updatePost(id, date, title, perex, content, image) {
+  async function updatePost(id, date, title, title_eng, perex, perex_eng, content, content_eng, image) {
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -156,8 +175,11 @@ export default function AdminPostsPage() {
           await updateDoc(docRef, {
             date: formattedDate.toISOString(),
             title,
+            title_eng,
             perex,
+            perex_eng,
             content,
+            content_eng,
             image,
             userId: user.uid, // Ensure the userId field matches the authenticated user's UID
           });
@@ -194,9 +216,12 @@ export default function AdminPostsPage() {
 
   const fields = [
     { name: 'title', label: 'Titulek', value: newTitle, required: true },
+    { name: 'title_eng', label: 'Title ENG', value: newTitleEng, required: true }, 
     { name: 'date', label: 'Datum', value: newDate, required: true, type: 'date' },
     { name: 'perex', label: 'Perex', value: newPerex, required: true },
+    { name: 'perex_eng', label: 'Perex ENG', value: newPerexEng, required: true },
     { name: 'content', label: 'Obsah článku', value: newContent, required: true, multiline: true, minRows: 4 },
+    { name: 'content_eng', label: 'Blog content ENG', value: newContentEng, required: true, multiline: true, minRows: 4 },
     { name: 'image', label: 'Obrázek', value: '', required: true, type: 'file' },
   ];
 
@@ -205,14 +230,23 @@ export default function AdminPostsPage() {
       case 'title':
         setNewTitle(value);
         break;
+      case 'title_eng':
+        setNewTitleEng(value);
+        break;
       case 'date':
         setNewDate(value);
         break;
       case 'perex':
         setNewPerex(value);
         break;
+      case 'perex_eng':
+        setNewPerexEng(value);
+        break;
       case 'content':
         setNewContent(value);
+        break;
+      case 'content_eng':
+        setNewContentEng(value);
         break;
       case 'image':
         setNewImage(value);
@@ -220,7 +254,7 @@ export default function AdminPostsPage() {
       default:
         break;
     }
-  };
+  };  
 
   return (
     <Stack spacing={3}>
@@ -246,9 +280,12 @@ export default function AdminPostsPage() {
             key={post.id}
             id={post.id}
             title={post.title}
+            title_eng={post.title_eng}
             date={post.date}
             perex={post.perex}
+            perex_eng={post.perex_eng}
             content={post.content}
+            content_eng={post.content_eng}
             image={post.image}
             updatePost={updatePost}
             deletePost={() => openDialog(post.id)}

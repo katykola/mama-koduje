@@ -9,11 +9,12 @@ import DOMPurify from 'dompurify';
 import '../styles/quill-custom.css';
 
 
-export default function ReviewDetailPage({posts}) {
+export default function ReviewDetailPageEng({posts}) {
 
     const { urlTitle } = useParams();
-    const review = posts.find(post => post.urlTitle === urlTitle);
-    const postsWithAuthor = posts.filter(post => post.author);
+    const review = posts.find(post => post.urlTitle_eng === urlTitle);
+    const postsEng = posts.filter(post => post.author && post.perex_eng);
+
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     
 
@@ -38,9 +39,7 @@ export default function ReviewDetailPage({posts}) {
         year: 'numeric',
       });
 
-      const sanitizedContent = DOMPurify.sanitize(review.content);
-
-      console.log(review.link)
+      const sanitizedContent = DOMPurify.sanitize(review.content_eng);
     
       return (
             <>
@@ -62,9 +61,9 @@ export default function ReviewDetailPage({posts}) {
             my: '1rem'
           }}  
         />
-          <Typography variant="h1">{review.title}</Typography>
+          <Typography variant="h1">{review.title_eng}</Typography>
           <Typography variant="body1">{review.author}</Typography>
-          <Typography variant="body1" sx={{fontWeight: 600}}>{review.perex}</Typography>
+          <Typography variant="body1" sx={{fontWeight: 600}}>{review.perex_eng}</Typography>
           <Box className="ql-snow">
              <Box className="ql-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
           </Box>
@@ -74,7 +73,7 @@ export default function ReviewDetailPage({posts}) {
             <Box sx={{border: '1px solid var(--border-color)', p: 3}}>
               <Typography variant='body1' sx={{fontWeight: 600, mb: 1}}>Plusy</Typography>
                   <Box sx={{pl: 1}}>
-                    {review.positives.map((positive, i) => (
+                    {review.positives_eng.map((positive, i) => (
                       <Typography key={i} sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{positive}</Typography>
                     ))}
                   </Box>
@@ -82,7 +81,7 @@ export default function ReviewDetailPage({posts}) {
             <Box sx={{border: '1px solid var(--border-color)', p: 3}}>
               <Typography variant='body1' sx={{fontWeight: 600, mb: 1}}>Mínusy</Typography>
                   <Box sx={{pl: 1}}>
-                    {review.negatives.map((negative, i) => (
+                    {review.negatives_eng.map((negative, i) => (
                       <Typography key={i} sx={{mb: 0.5}}><CircleIcon sx={{fontSize: '0.5rem', mr: 1}}/>{negative}</Typography>
                     ))}
                   </Box>
@@ -92,9 +91,9 @@ export default function ReviewDetailPage({posts}) {
           <Grid container spacing={2} sx={{ position: 'relative', right: '1rem' }}>
             <Grid item sm={6} sx={{ display: 'flex', flexDirection: 'column' }}>
               <Box sx={{ border: '1px solid var(--border-color)', p: 3, flexGrow: 1 }}>
-                <Typography variant='body1' sx={{ fontWeight: 600, mb: 1 }}>Plusy</Typography>
+                <Typography variant='body1' sx={{ fontWeight: 600, mb: 1 }}>Positives</Typography>
                 <Box sx={{ pl: 1 }}>
-                  {review.positives.map((positive, i) => (
+                  {review.positives_eng.map((positive, i) => (
                     <Typography key={i} sx={{ mb: 0.5 }}><CircleIcon sx={{ fontSize: '0.5rem', mr: 1 }} />{positive}</Typography>
                   ))}
                 </Box>
@@ -102,9 +101,9 @@ export default function ReviewDetailPage({posts}) {
             </Grid>
             <Grid item sm={6} sx={{ display: 'flex', flexDirection: 'column' }}>
               <Box sx={{ border: '1px solid var(--border-color)', p: 3, flexGrow: 1 }}>
-                <Typography variant='body1' sx={{ fontWeight: 600, mb: 1 }}>Mínusy</Typography>
+                <Typography variant='body1' sx={{ fontWeight: 600, mb: 1 }}>Negatives</Typography>
                 <Box sx={{ pl: 1 }}>
-                  {review.negatives.map((negative, i) => (
+                  {review.negatives_eng.map((negative, i) => (
                     <Typography key={i} sx={{ mb: 0.5 }}><CircleIcon sx={{ fontSize: '0.5rem', mr: 1 }} />{negative}</Typography>
                   ))}
                 </Box>
@@ -121,12 +120,12 @@ export default function ReviewDetailPage({posts}) {
 
           <Box>
             <Stack direction='row' justifyContent='space-between' alignItems='start' sx={{ mb: 2 }}>
-              <Typography variant='sectionTitle'>Další recenze</Typography>
-              <Link variant='body1' component={RouterLink} to='/recenze'>Všechny recenze</Link>
+              <Typography variant='sectionTitle'>Next reviews</Typography>
+              <Link variant='body1' component={RouterLink} to='/recenze'>All reviews</Link>
             </Stack>
 
             <Grid container spacing={2} >
-            {postsWithAuthor
+            {postsEng
             .filter(p => p.id !== review.id)
             .slice(0, 3)
             .map((post, index) => (

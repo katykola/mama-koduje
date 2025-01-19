@@ -9,7 +9,7 @@ export const validateFields = (values, isPost = false, isLifeXP = false) => {
     if (!values.image) newErrors.image = 'Obrázek je povinný';
   } else if (isLifeXP){
     if (!values.order) newErrors.order = 'Pořadí je povinné';
-    if (!values.date) newErrors.date = 'Měsíc Rok je povinné';
+    if (!values.termin) newErrors.date = 'Měsíc Rok je povinné';
     if (!values.title) newErrors.title = 'Název je povinné';
     if (!values.subtitle) newErrors.subtitle = 'Podnázev je povinné';
     if (!values.text) newErrors.text = 'Text je povinné';

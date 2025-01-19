@@ -1,11 +1,14 @@
 import { Box, Stack, Typography, Rating, Link } from "@mui/material";
 import { Link as RouterLink } from 'react-router-dom';
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ReviewTile({ title, urlTitle, author, perex, tags, rating }) {
+  const { language } = useLanguage();
+
   return (
     <>
       <Box sx={{border: '1px solid var(--border-color)' }} >
-      <Link component={RouterLink} to={`/recenze/${urlTitle}`} >
+      <Link component={RouterLink} to={ language === 'eng' ?  `/reviews/${urlTitle}` : `/recenze/${urlTitle}`} >
       <Box sx={{  padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', textAlign: 'left' }} >
         <Stack direction='row' spacing={1} sx={{  mb: '1rem' }}>
           {tags.map((tag, id) => (

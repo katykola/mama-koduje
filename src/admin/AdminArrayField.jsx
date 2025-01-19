@@ -36,6 +36,7 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
     onChange(newValues);
   };
 
+
   if (isTagsField && !isPost) {
     return (
       <>
@@ -115,7 +116,6 @@ export default function ArrayField({ label, values, onChange, existingItems, isT
             value={value}
             InputProps={{
               readOnly: true,
-            //   style: { color: 'white' }, // Set text color to white
               endAdornment: (
                 <InputAdornment position="end" sx={{ marginLeft: '0.5rem' }}>
                   <IconButton onClick={() => handleRemove(index)} sx={{ color: 'black' }}>

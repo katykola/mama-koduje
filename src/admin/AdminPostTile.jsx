@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Stack, Button, Typography, TextField, Box } from '@mui/material';
-import { uploadImageToCloudinary } from '../config/cloudinaryUpload'; // Import the Cloudinary upload function
 import { validateFields } from '../config/validation'; // Import the validateFields function
 import { getFields } from '../config/formFields';
 import AdminEditForm from './AdminEditForm';
@@ -8,9 +7,12 @@ import AdminEditForm from './AdminEditForm';
 export default function AdminPostTile({
   id,
   title,
+  title_eng,
   date,
   perex,
+  perex_eng,
   content,
+  content_eng,
   image,
   updatePost,
   deletePost
@@ -26,9 +28,12 @@ export default function AdminPostTile({
   const [isEditing, setIsEditing] = useState(false);
 
   const [editedTitle, setEditedTitle] = useState(title);
+  const [editedTitleEng, setEditedTitleEng] = useState(title_eng);
   const [editedDate, setEditedDate] = useState(dateObject);
   const [editedPerex, setEditedPerex] = useState(perex);
+  const [editedPerexEng, setEditedPerexEng] = useState(perex_eng);
   const [editedContent, setEditedContent] = useState(content);
+  const [editedContentEng, setEditedContentEng] = useState(content_eng);
   const [editedImage, setEditedImage] = useState(image);
   const [errors, setErrors] = useState({}); 
 
@@ -39,26 +44,32 @@ export default function AdminPostTile({
   const handleSave = () => {
     const newErrors = validateFields({
       title: editedTitle,
+      title_eng: editedTitleEng,
       date: editedDate,
       perex: editedPerex,
+      perex_eng: editedPerexEng,
       content: editedContent,
+      content_eng: editedContentEng,
       image: editedImage,
     }, true, false);
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    updatePost(id, editedDate.toISOString(), editedTitle, editedPerex, editedContent, editedImage);
+    updatePost(id, editedDate.toISOString(), editedTitle, editedTitleEng, editedPerex, editedPerexEng, editedContent, editedContentEng, editedImage);
     setIsEditing(false);
   };
 
   const values = {
     title: editedTitle,
+    title_eng: editedTitleEng,
     date: editedDate,
     perex: editedPerex,
+    perex_eng: editedPerexEng,
     content: editedContent,
+    content_eng: editedContentEng,
     image: editedImage,
   };
 
-  const fields = getFields(values, true, false); // Use getFields to generate the fields array
+  const fields = getFields(values, true, false); 
 
   return (
     <>
@@ -82,15 +93,24 @@ export default function AdminPostTile({
             switch (name) {
               case 'title':
                 setEditedTitle(value);
-                break;       
+                break;
+              case 'title_eng':
+                setEditedTitleEng(value);
+                break;        
               case 'date':
                 setEditedDate(value);
                 break;
               case 'perex':
                 setEditedPerex(value);
                 break;
+              case 'perex_eng':
+                 setEditedPerexEng(value);
+                break;
               case 'content':
                 setEditedContent(value);
+                break;
+              case 'content_eng':
+                setEditedContentEng(value);
                 break;
               case 'image':
                 setEditedImage(value);

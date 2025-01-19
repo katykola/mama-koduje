@@ -14,19 +14,25 @@ export default function NewAdminReviewsPage() {
   const [posts, setPosts] = useState([]);
   const [newTags, setnewTags] = useState([]);
   const [newTitle, setnewTitle] = useState('');
+  const [newTitleEng, setnewTitleEng] = useState('');
   const [newAuthor, setnewAuthor] = useState('');
   const [newDate, setnewDate] = useState(new Date());
   const [newRating, setnewRating] = useState(0);
   const [newPerex, setnewPerex] = useState('');
+  const [newPerexEng, setnewPerexEng] = useState('');
   const [newContent, setnewContent] = useState('');
+  const [newContentEng, setnewContentEng] = useState('');
   const [newPositives, setnewPositives] = useState([]);
+  const [newPositivesEng, setnewPositivesEng] = useState([]);
   const [newNegatives, setnewNegatives] = useState([]);
+  const [newNegativesEng, setnewNegativesEng] = useState([]);
   const [newLink, setnewLink] = useState('');
   const [errors, setErrors] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
   const [existingTags, setExistingTags] = useState([]);
   const [urlTitle, setUrlTitle] = useState('');
+  const [urlTitleEng, setUrlTitleEng] = useState('');
 
   // Getting data from Firebase
   async function getPosts() {
@@ -82,18 +88,26 @@ export default function NewAdminReviewsPage() {
     const newErrors = validateFields({
       tags: newTags,
       title: newTitle,
+      title_eng: newTitleEng,
       date: newDate,
       rating: newRating,
       perex: newPerex,
+      perex_eng: newPerexEng,
       content: newContent,
+      content_eng: newContentEng,
       positives: newPositives,
+      positives_eng: newPositivesEng,
       negatives: newNegatives,
+      negatives_eng: newNegativesEng,
     });
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     
     const generatedUrlTitle = generateUrlTitle(newTitle);
     setUrlTitle(generatedUrlTitle);
+
+    const generatedUrlTitleEng = generateUrlTitle(newTitleEng);
+    setUrlTitle(generatedUrlTitleEng);
 
     try {
       const user = auth.currentUser;
@@ -104,29 +118,41 @@ export default function NewAdminReviewsPage() {
       await addDoc(collection(db, 'posts'), {
         tags: newTags,
         title: newTitle,
+        title_eng: newTitleEng,
         author: newAuthor,
         date: newDate ? newDate.toISOString() : null,
         rating: newRating,
         perex: newPerex,
+        perex_eng: newPerexEng,
         content: newContent,
+        content_eng: newContentEng,
         positives: newPositives,
+        positives_eng: newPositivesEng,
         negatives: newNegatives,
+        negatives_eng: newNegativesEng,
         link: newLink,
         urlTitle: generatedUrlTitle,
+        urlTitle_eng: generatedUrlTitleEng,
         userId: user.uid, // Ensure the userId field matches the authenticated user's UID
       });
       getPosts();
       setnewTags([]);
       setnewTitle('');
+      setnewTitleEng('');
       setnewAuthor('');
       setnewDate(new Date());
       setnewRating(0);
       setnewPerex('');
+      setnewPerexEng('');
       setnewContent('');
+      setnewContentEng('');
       setnewPositives([]);
+      setnewPositivesEng([]);
       setnewNegatives([]);
+      setnewNegativesEng([]);
       setnewLink('');
       setUrlTitle('');
+      setUrlTitleEng('');
       toggleCreateNew();
     } catch (err) {
       console.log(err);
@@ -141,6 +167,9 @@ export default function NewAdminReviewsPage() {
       case 'title':
         setnewTitle(value);
         break;
+      case 'title_eng':
+        setnewTitleEng(value);
+        break;
       case 'author':
         setnewAuthor(value);
         break;
@@ -150,8 +179,14 @@ export default function NewAdminReviewsPage() {
       case 'perex':
         setnewPerex(value);
         break;
+      case 'perex_eng':
+        setnewPerexEng(value);
+        break;
       case 'content':
         setnewContent(value);
+        break;
+      case 'content_eng':
+        setnewContentEng(value);
         break;
       case 'rating':
         setnewRating(value);
@@ -159,8 +194,14 @@ export default function NewAdminReviewsPage() {
       case 'positives':
         setnewPositives(value);
         break;
+      case 'positives_eng':
+        setnewPositivesEng(value);
+        break;
       case 'negatives':
         setnewNegatives(value);
+        break;
+      case 'negatives_eng':
+        setnewNegativesEng(value);
         break;
       case 'link':
         setnewLink(value);
@@ -211,7 +252,7 @@ export default function NewAdminReviewsPage() {
   }
 
  // Updating a document
- async function updatePost(id, tags, title, author, date, rating, perex, content, positives, negatives, link) {
+ async function updatePost(id, tags, title, title_eng, author, date, rating, perex, perex_eng, content, content_eng, positives, positives_eng, negatives, negatives_eng, link) {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -223,23 +264,23 @@ export default function NewAdminReviewsPage() {
     const docRef = doc(db, 'posts', id);
     const docSnapshot = await getDoc(docRef);
 
-    console.log('docSnapshot:', docSnapshot.data());
-    console.log('docSnapshot.data().id:', docSnapshot.data().id);
-
-    console.log('docSnapshot.data().userId:', docSnapshot.data().userId);
-
     if (docSnapshot.exists()) {
       if (docSnapshot.data().userId === user.uid) {
         await updateDocument('posts', id, {
           tags,
           date,
           title,
+          title_eng,
           author,
           rating,
           perex,
+          perex_eng,
           content,
+          content_eng,
           positives,
+          positives_eng,
           negatives,
+          negatives_eng,
           link,
         });
         const postsData = await fetchCollection('posts');
@@ -256,6 +297,7 @@ export default function NewAdminReviewsPage() {
   }
 }
 
+
   return (
     <>
       {isHiddenCreateNew ? (
@@ -268,13 +310,18 @@ export default function NewAdminReviewsPage() {
           fields={getFields({
             tags: newTags,
             title: newTitle,
+            title_eng: newTitleEng,
             author: newAuthor,
             date: newDate,
             rating: newRating,
             perex: newPerex,
+            perex_eng: newPerexEng,
             content: newContent,
+            content_eng: newContentEng,
             positives: newPositives,
+            positives_eng: newPositivesEng,
             negatives: newNegatives,
+            negatives_eng: newNegativesEng,
             link: newLink,
           })}
           errors={errors}
@@ -292,13 +339,18 @@ export default function NewAdminReviewsPage() {
             id={post.id}
             tags={post.tags}
             title={post.title}
+            title_eng={post.title_eng}
             author={post.author}
             date={post.date}
             rating={post.rating}
             perex={post.perex}
+            perex_eng={post.perex_eng}
             content={post.content}
+            content_eng={post.content_eng}
             positives={post.positives}
+            positives_eng={post.positives_eng}
             negatives={post.negatives}
+            negatives_eng={post.negatives_eng}
             link={post.link}
             deletePost={() => openDialog(post.id)}
             updatePost={updatePost} 

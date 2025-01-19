@@ -49,6 +49,7 @@ export default function AdminNewForm({
                     )}
                   />
                 </LocalizationProvider>
+
               ) : field.type === 'array' ? (
                 <AdminArrayField
                   label={field.label}
@@ -60,6 +61,7 @@ export default function AdminNewForm({
                   error={!!errors[field.name]}
                   helperText={errors[field.name]}
                 />
+
               ) : field.name === 'content' ? (
                 <QuillEditor
                   required={field.required}
@@ -69,6 +71,17 @@ export default function AdminNewForm({
                   onChange={onChange}
                   errors={errors}
                 />
+
+              ) : field.name === 'content_eng' ? (
+                <QuillEditor
+                  required={field.required}
+                  label={field.label}
+                  value={field.value}
+                  name={field.name}
+                  onChange={onChange}
+                  errors={errors}
+                />
+                
               ) : field.name === 'image' ? (
                   <TextField
                     type="file"

@@ -3,7 +3,7 @@ import { Stack, Button, Typography } from '@mui/material';
 import AdminEditForm from './AdminEditForm';
 import { validateFields } from '../config/validation'; // Import validateFields function
 
-export default function NewAdminReviewTile({ id, tags, title, author, date, rating, perex, content, positives, negatives, link, deletePost, updatePost, existingTags }) {
+export default function NewAdminReviewTile({ id, tags, title, title_eng, author, date, rating, perex, perex_eng, content, content_eng, positives, positives_eng, negatives, negatives_eng, link, deletePost, updatePost, existingTags }) {
 
   // Convert the date string to a Date object if it's not already a Date object
   let dateObject = typeof date === 'string' ? new Date(date) : date;
@@ -21,13 +21,18 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
   const [isEditing, setIsEditing] = useState(false);
   const [editedTags, setEditedTags] = useState(tags);
   const [editedTitle, setEditedTitle] = useState(title);
+  const [editedTitleEng, setEditedTitleEng] = useState(title_eng);
   const [editedAuthor, setEditedAuthor] = useState(author);
   const [editedDate, setEditedDate] = useState(dateObject);
   const [editedRating, setEditedRating] = useState(rating);
   const [editedPerex, setEditedPerex] = useState(perex);
+  const [editedPerexEng, setEditedPerexEng] = useState(perex_eng);
   const [editedContent, setEditedContent] = useState(content);
+  const [editedContentEng, setEditedContentEng] = useState(content_eng);
   const [editedPositives, setEditedPositives] = useState(positives);
+  const [editedPositivesEng, setEditedPositivesEng] = useState(positives_eng);
   const [editedNegatives, setEditedNegatives] = useState(negatives);
+  const [editedNegativesEng, setEditedNegativesEng] = useState(negatives_eng);
   const [editedLink, setEditedLink] = useState(link);
   const [errors, setErrors] = useState({}); 
 
@@ -36,21 +41,25 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
   };
 
   const handleSave = () => {
-    console.log('handleSave');
     const newErrors = validateFields({
       tags: editedTags,
       title: editedTitle,
+      title_eng: editedTitleEng,
       date: editedDate,
       rating: editedRating,
       perex: editedPerex,
+      perex_eng: editedPerexEng,
       content: editedContent,
+      content_eng: editedContentEng,
       positives: editedPositives,
+      positives_eng: editedPositivesEng,
       negatives: editedNegatives,
+      negatives_eng: editedNegativesEng,
     }, false, false);
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    updatePost(id, editedTags, editedTitle, editedAuthor, editedDate.toISOString(), editedRating, editedPerex, editedContent, editedPositives, editedNegatives, editedLink);
+    updatePost(id, editedTags, editedTitle, editedTitleEng, editedAuthor, editedDate.toISOString(), editedRating, editedPerex, editedPerexEng,editedContent, editedContentEng, editedPositives, editedPositivesEng, editedNegatives,  editedNegativesEng, editedLink);
     setIsEditing(false);
   };
 
@@ -71,13 +80,18 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
           values={{
             tags: editedTags,
             title: editedTitle,
+            title_eng: editedTitleEng,
             author: editedAuthor,
             date: editedDate,
             rating: editedRating,
             perex: editedPerex,
+            perex_eng: editedPerexEng,
             content: editedContent,
+            content_eng: editedContentEng,
             positives: editedPositives,
+            positives_eng: editedPositivesEng,
             negatives: editedNegatives,
+            negatives_eng: editedNegativesEng,
             link: editedLink,
           }}
           errors={errors}
@@ -90,6 +104,9 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
                 break;
               case 'title':
                 setEditedTitle(value);
+                break;              
+              case 'title_eng':
+                setEditedTitleEng(value);
                 break;
               case 'author':
                 setEditedAuthor(value);
@@ -103,15 +120,27 @@ export default function NewAdminReviewTile({ id, tags, title, author, date, rati
               case 'perex':
                 setEditedPerex(value);
                 break;
+              case 'perex_eng':
+                setEditedPerexEng(value);
+                break;
               case 'content':
                 setEditedContent(value);
                 break;
+              case 'content_eng':
+                setEditedContentEng(value);
+                break;
               case 'positives':
                 setEditedPositives(value);
-                break;              
+                break;
+              case 'positives_eng':
+                setEditedPositivesEng(value);
+                break;               
               case 'negatives':
                 setEditedNegatives(value);
-                break;              
+                break;
+              case 'negatives_eng':
+                setEditedNegativesEng(value);
+                break;                
               case 'link':
                 setEditedLink(value);
                 break;

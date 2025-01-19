@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Stack,Button } from '@mui/material';
 import { db, auth } from '../config/firebase';
-import { fetchCollection, addDocument, updateDocument, deleteDocument } from '../utils/firebaseUtils';
-import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { updateDocument } from '../utils/firebaseUtils';
+import { collection, doc, getDoc, getDocs, addDoc, deleteDoc } from 'firebase/firestore';
 import AdminLifeTile from './AdminLifeTile';
 import AdminDeleteDialog from './AdminDeleteDialog';
 import AdminNewForm from './AdminNewForm';
@@ -11,11 +11,16 @@ export default function AdminLifePage() {
 
   const [isHiddenCreateNew, setIsHiddenCreateNew] = useState(true);
   const [lifeXPList, setLifeXPList] = useState([]);
+
   const [newLifeXPOrder, setNewLifeXPOrder] = useState('');
-  const [newLifeXPDate, setNewLifeXPDate] = useState('');
+  const [newLifeXPTermin, setNewLifeXPTermin] = useState('');
+  const [newLifeXPTerminEng, setNewLifeXPTerminEng] = useState('');
   const [newLifeXPTitle, setNewLifeXPTitle] = useState('');
+  const [newLifeXPTitleEng, setNewLifeXPTitleEng] = useState('');
   const [newLifeXPSubtitle, setNewLifeXPSubtitle] = useState('');
   const [newLifeXPText, setNewLifeXPText] = useState('');
+  const [newLifeXPTextEng, setNewLifeXPTextEng] = useState('');
+
   const [errors, setErrors] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
@@ -44,10 +49,13 @@ export default function AdminLifePage() {
   function validateFields() {
     const newErrors = {};
     if (!newLifeXPOrder) newErrors.order = 'Pořadí je povinné';
-    if (!newLifeXPDate) newErrors.date = 'Měsíc Rok je povinné';
+    if (!newLifeXPTermin) newErrors.termin = 'Měsíc Rok je povinné';
+    if (!newLifeXPTerminEng) newErrors.termin_eng = 'Month and Year are required';
     if (!newLifeXPTitle) newErrors.title = 'Název je povinné';
+    if (!newLifeXPTitleEng) newErrors.title_eng = 'Title is required';
     if (!newLifeXPSubtitle) newErrors.subtitle = 'Podnázev je povinné';
     if (!newLifeXPText) newErrors.text = 'Text je povinné';
+    if (!newLifeXPTextEng) newErrors.text_eng = 'Description is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -63,18 +71,24 @@ export default function AdminLifePage() {
 
       await addDoc(lifeXPCollectionRef, {
         order: newLifeXPOrder,
-        date: newLifeXPDate,
+        termin: newLifeXPTermin,
+        termin_eng: newLifeXPTerminEng,
         title: newLifeXPTitle,
+        title_eng: newLifeXPTitleEng,
         subtitle: newLifeXPSubtitle,
         text: newLifeXPText,
-        userId: user.uid, // Ensure the userId field matches the authenticated user's UID
+        text_eng: newLifeXPTextEng,
+        userId: user.uid, 
       });
       getLifeXPList();
       setNewLifeXPOrder('');
-      setNewLifeXPDate('');
+      setNewLifeXPTermin('');
+      setNewLifeXPTerminEng('');
       setNewLifeXPTitle('');
+      setNewLifeXPTitleEng('');
       setNewLifeXPSubtitle('');
       setNewLifeXPText('');
+      setNewLifeXPTextEng('');
       setErrors({});
       toggleCreateNew();
     } catch (err) {
@@ -112,7 +126,8 @@ export default function AdminLifePage() {
     }
   }
 
-   async function updateLifeXP(id, order, date, title, subtitle, text) {
+   async function updateLifeXP(id, order, termin, termin_eng, title, title_eng, subtitle, text, text_eng) {
+    console.log('update')
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -134,10 +149,13 @@ export default function AdminLifePage() {
           console.log('docSnapshot.data().id:', docSnapshot.data().id);
           await updateDocument('lifeExperience', id, {
             order,
-            date,
+            termin,
+            termin_eng,
             title,
+            title_eng,
             subtitle,
             text,
+            text_eng
           });
           getLifeXPList();
         } else {
@@ -167,10 +185,13 @@ export default function AdminLifePage() {
 
   const fields = [
     { name: 'order', label: 'Pořadí', value: newLifeXPOrder, required: true },
-    { name: 'date', label: 'Měsíc Rok', value: newLifeXPDate, required: true },
+    { name: 'termin', label: 'Měsíc Rok', value: newLifeXPTermin, required: true },
+    { name: 'termin_eng', label: 'ENG - Month Year', value: newLifeXPTerminEng, required: true },
     { name: 'title', label: 'Název', value: newLifeXPTitle, required: true },
+    { name: 'title_eng', label: 'ENG - Title', value: newLifeXPTitleEng, required: true },
     { name: 'subtitle', label: 'Podnázev', value: newLifeXPSubtitle, required: true },
     { name: 'text', label: 'Text', value: newLifeXPText, required: true, multiline: true, minRows: 4 },
+    { name: 'text_eng', label: 'ENG - Text', value: newLifeXPTextEng, required: true, multiline: true, minRows: 4 },
   ];
 
   const handleFieldChange = (name, value) => {
@@ -178,11 +199,17 @@ export default function AdminLifePage() {
       case 'order':
         setNewLifeXPOrder(value);
         break;
-      case 'date':
-        setNewLifeXPDate(value);
+      case 'termin':
+        setNewLifeXPTermin(value);
+        break;
+      case 'termin_eng':
+        setNewLifeXPTerminEng(value);
         break;
       case 'title':
         setNewLifeXPTitle(value);
+        break;
+      case 'title_eng':
+        setNewLifeXPTitleEng(value);
         break;
       case 'subtitle':
         setNewLifeXPSubtitle(value);
@@ -190,10 +217,14 @@ export default function AdminLifePage() {
       case 'text':
         setNewLifeXPText(value);
         break;
+      case 'text_eng':
+        setNewLifeXPTextEng(value);
+        break;
       default:
         break;
     }
   };
+
 
   return (
     <>
@@ -219,10 +250,13 @@ export default function AdminLifePage() {
             key={lifeXP.id}
             id={lifeXP.id}
             order={lifeXP.order}
-            date={lifeXP.date}
+            termin={lifeXP.termin}
+            termin_eng={lifeXP.termin_eng}
             title={lifeXP.title}
+            title_eng={lifeXP.title_eng}
             subtitle={lifeXP.subtitle}
             text={lifeXP.text}
+            text_eng={lifeXP.text_eng}
             deleteLifeXP={() => openDialog(lifeXP.id)}
             updateLifeXP={updateLifeXP}
           />

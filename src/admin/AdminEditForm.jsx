@@ -90,6 +90,17 @@ export default function AdminEditForm({
                   }}
                   errors={errors}
                 />
+              ) : field.name === 'content_eng' ? (
+                <QuillEditor
+                  required={field.required}
+                  label={field.label}
+                  value={field.value}
+                  name={field.name}
+                  onChange={(name, newValue) => {
+                    onChange(name, newValue);
+                  }}
+                  errors={errors}
+                />
               ) : field.name === 'image' ? (
                 <Box>
                   {image && (

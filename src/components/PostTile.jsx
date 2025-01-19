@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Stack, Box, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) => {
-    const stackRef = useRef(null); // Reference to the Stack component
+    const stackRef = useRef(null); 
     const [isNarrow, setIsNarrow] = useState(false);
+    const { language } = useLanguage();
 
     useEffect(() => {
-        // Function to check the width of the Stack
         const updateWidth = () => {
             if (stackRef.current) {
                 setIsNarrow(stackRef.current.offsetWidth < 400);
             }
         };
 
-        // Update on mount and resize
         updateWidth();
         window.addEventListener('resize', updateWidth);
 
@@ -23,12 +24,13 @@ const ResponsivePostTile = ({ imgSrc, formattedDate, urlTitle, title, perex }) =
         };
     }, []);
 
+
     return (
         <Box>
-        <Link component={RouterLink} to={`/clanky/${urlTitle}`}>
+        <Link component={RouterLink} to={ language === 'eng' ? `/blog/${urlTitle}` : `/clanky/${urlTitle}`}>
         <Stack
             ref={stackRef}
-            direction={isNarrow ? 'column' : 'row'} // Conditional direction based on width
+            direction={isNarrow ? 'column' : 'row'} 
             sx={{
                 width: '100%',
                 border: '1px solid var(--border-color)',

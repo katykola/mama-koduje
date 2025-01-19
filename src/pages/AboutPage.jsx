@@ -3,16 +3,7 @@ import { Box, Stack, Typography, Divider } from '@mui/material';
 import LifeTile from "../components/LifeTile"
 import { db } from "../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import katyVeSlunci from '../assets/images/katy-ve-slunci300.jpg'; 
-import miminkoSHrazdickou from '../assets/images/miminko-s-hrazdickou.jpg'; 
-import nositko from '../assets/images/nositko.jpg';
-import diteAPonozky from '../assets/images/dite-a-ponozky.jpg';
-import batolatko from '../assets/images/batolatko.jpg';
-import notebook from '../assets/images/notebook.jpg';
-import katerinaKolarova from '../assets/images/katerina_kolarova.jpg';
-import medvidek from '../assets/images/medvidek.jpg';
-import naHristi from '../assets/images/na-hristi.jpg';
-import KaterinaKolarova2 from '../assets/images/katerina-kolarova.jpg';
+import AboutMePhotos from '../components/About-me-photos';
 
 export default function AboutPage() {
 
@@ -61,7 +52,6 @@ export default function AboutPage() {
 
           <Stack spacing={4} direction="row" >
 
-            {/* Sloupek s textem */}
             <Stack sx={{ml: '-6rem'}} spacing={4}>
                 {lifeXPList.map((lifeXP) => (
                     <LifeTile
@@ -76,109 +66,7 @@ export default function AboutPage() {
                 ))}
             </Stack>
            
-           {/* Sloupek s fotkama */}
-            <Stack spacing={4} sx={{display: { xs: 'none', sm: 'flex' }}}>
-              <Box
-                  component="img"
-                  sx={{
-                      width: '300px',
-                      objectFit: 'cover', // Maintain aspect ratio and cover the area
-                      objectPosition: 'top', // Align the top part of the image with the top of the container
-                  }}
-                  alt="placeholder"
-                  src={katyVeSlunci}
-              />
-              <Box
-                  component="img"
-                  sx={{
-                      width: '300px',
-                      objectFit: 'cover', // Maintain aspect ratio and cover the area
-                      objectPosition: 'top', // Align the top part of the image with the top of the container
-                  }}
-                  alt="placeholder"
-                  src={medvidek}
-              />          
-              <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={miminkoSHrazdickou}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={nositko}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={diteAPonozky}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={batolatko}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={notebook}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={katerinaKolarova}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={naHristi}
-                />
-                <Box
-                component="img"
-                sx={{
-                    width: '300px',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                    objectPosition: 'top', // Align the top part of the image with the top of the container
-                }}
-                alt="placeholder"
-                src={KaterinaKolarova2}
-                />
-            </Stack>
+          <AboutMePhotos />
 
           </Stack>
         
